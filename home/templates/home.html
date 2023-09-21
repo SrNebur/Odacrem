@@ -1,0 +1,115 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/home.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Banner Hero -->
+<div id="hero-carousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicadores -->
+    <ol class="carousel-indicators">
+        <li data-bs-target="#hero-carousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#hero-carousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#hero-carousel" data-bs-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <!-- Item del carrusel activo inicialmente -->
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6">
+                        <img class="img-fluid" src="{% static '/img/banner_img_01.png' %}" alt="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- 2º Item del carrusel -->
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="d-block w-100 border-0 border-5 shadow p-3"
+                            src="{% static '/img/banner_img_02.png' %}" alt="">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left align-self-center">
+                            <h3 class="h1 text-success">Más que moda, una declaración de identidad.</h3>
+                            <p>
+                                Nuestra misión es simple: ayudarte a encontrar tu estilo, y, a través de él, expresar
+                                quién eres.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 3º Item del carrusel -->
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="{% static '/img/banner_img_03.png' %}" alt="">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h3 class="h1 text-success">Tu estilo, tu elección, nuestra pasión.</h3>
+                            <p>
+                                En nuestro mundo de moda, tu estilo es la estrella, tu elección es la clave, y nuestra pasión es brindarte lo mejor
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Botón para ir al item anterior -->
+    <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#hero-carousel" role="button"
+        data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <!-- Botón para ir al item siguiente -->
+    <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#hero-carousel" role="button"
+        data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+</div>
+<!-- End Banner Hero -->
+
+
+<!-- Categorias especiales -->
+<section class="container py-5">
+    <div class="row text-center pt-3">
+        <div class="col-lg-6 m-auto">
+            <h1 class="h1">Categorias</h1>
+            <p>
+                Estas son algunas de nuestras categorias, pero si quieres saber más no dudes en pasarte por nuestra
+                tienda.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 p-5 mt-3">
+            <a href="#"><img src="{% static '/img/category_img_01.png' %}" class="rounded-circle img-fluid border"></a>
+            <h5 class="text-center mt-3 mb-3">Ropa</h5>
+            <p class="text-center"><a class="btn btn-success">Ir a la tienda</a></p>
+        </div>
+        <div class="col-12 col-md-4 p-5 mt-3">
+            <a href="#"><img src="{% static '/img/category_img_02.png' %}" class="rounded-circle img-fluid border"></a>
+            <h2 class="h5 text-center mt-3 mb-3">Calzado</h2>
+            <p class="text-center"><a class="btn btn-success">Ir a la tienda</a></p>
+        </div>
+        <div class="col-12 col-md-4 p-5 mt-3">
+            <a href="#"><img src="{% static '/img/category_img_03.png' %}" class="rounded-circle img-fluid border"></a>
+            <h2 class="h5 text-center mt-3 mb-3">Accesorios</h2>
+            <p class="text-center"><a class="btn btn-success">Ir a la tienda</a></p>
+        </div>
+    </div>
+</section>
+<!-- End Categories of The Month -->
+
+{% endblock %}

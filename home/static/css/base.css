@@ -1,0 +1,211 @@
+/* Tipografia */
+body,
+ul,
+li,
+p,
+a,
+label,
+input,
+div {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px !important;
+  font-weight: 300 !important;
+}
+
+.h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 50px !important;
+  font-weight: 200 !important;
+}
+
+.h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 32px !important;
+  font-weight: 300;
+}
+
+.h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px !important;
+}
+
+
+
+
+
+/* CSS General */
+.logo {
+  font-family: 'dumbeliteregular' !important;
+  font-size: 80px !important;
+  font-weight: 500 !important;
+}
+
+.dumbleregular {
+  font-family: 'dumbeliteregular' !important;
+}
+
+.text-warning {
+  color: #ede861 !important;
+}
+
+.text-muted {
+  color: #bcbcbc !important;
+}
+
+.text-success {
+  color: #59ab6e !important;
+}
+
+.text-light {
+  color: #cfd6e1 !important;
+}
+
+.bg-dark {
+  background-color: #212934 !important;
+}
+
+.bg-light {
+  background-color: #e9eef5 !important;
+}
+
+.bg-black {
+  background-color: #1d242d !important;
+}
+
+.bg-success {
+  background-color: #59ab6e !important;
+}
+
+.btn-success {
+  background-color: #59ab6e !important;
+  border-color: #56ae6c !important;
+}
+
+.pagination .page-link:hover {
+  color: #000;
+}
+
+.pagination .page-link:hover,
+.pagination .page-link.active {
+  background-color: #69bb7e;
+  color: #fff;
+}
+
+/* Navegador */
+#nav_top {
+  min-height: 40px;
+}
+
+#nav_top * {
+  font-size: .9em !important;
+}
+
+#main_nav a {
+  color: #212934;
+}
+
+#main_nav a:hover {
+  color: #69bb7e;
+}
+
+#main_nav .navbar .nav-icon {
+  margin-right: 20px;
+}
+
+
+/* Footer */
+#footer a {
+  color: #dcdde1;
+}
+
+#footer a:hover {
+  color: #68bb7d;
+}
+
+#footer ul.footer-link-list li {
+  padding-top: 10px;
+}
+
+#footer ul.footer-icons li {
+  width: 2.6em;
+  height: 2.6em;
+  line-height: 2.6em;
+}
+
+#footer ul.footer-icons li:hover {
+  background-color: #cfd6e1;
+  transition: .5s;
+}
+
+#footer ul.footer-icons li:hover i {
+  color: #212934;
+  transition: .5s;
+}
+
+#footer .border-light {
+  border-color: #2d343f !important;
+}
+
+/* Mediaquerys */
+
+/* Dispositivos pequeños 576px*/
+.product-wap .h3,
+.product-wap li,
+.product-wap i,
+.product-wap p {
+  font-size: 12px !important;
+}
+
+.product-wap .product-color-dot {
+  width: 6px;
+  height: 6px;
+}
+
+@media (min-width: 576px) {
+  .tempaltemo-carousel .h1 {
+    font-size: 1em !important;
+  }
+}
+
+/*Dispositivos medianos 768px*/
+@media (min-width: 768px) {
+  #main_nav .navbar-nav {
+    max-width: 450px;
+  }
+}
+
+/* Dispositivos grandes 992px*/
+@media (min-width: 992px) {
+  #main_nav .navbar-nav {
+    max-width: 550px;
+  }
+
+  #hero-carousel .carousel-item {
+    min-height: 30rem !important;
+  }
+
+  .product-wap .h3,
+  .product-wap li,
+  .product-wap i,
+  .product-wap p {
+    font-size: 18px !important;
+  }
+
+  .product-wap .product-color-dot {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Dispositivos extra grandes 1200px */
+@media (min-width: 1200px) {}
+
+
+/*Fuentes personalizadas*/
+@font-face {
+  font-family: 'dumbeliteregular';
+  src: url('../webfonts/dumbelite-webfont.woff2') format('woff2'),
+    url('../webfonts/dumbelite.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
