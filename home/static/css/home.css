@@ -1,2 +1,11 @@
 /* Hero Carousel */
 #hero-carousel { background: #efefef !important;}
+#hero-carousel .carousel-indicators li {
+    margin-top: -50px;
+    background-color: #59ab6e;
+  }
+  #hero-carousel .carousel-control-next i,
+  #hero-carousel .carousel-control-prev i {
+    color: #59ab6e !important;
+    font-size: 2.8em !important;
+  }
