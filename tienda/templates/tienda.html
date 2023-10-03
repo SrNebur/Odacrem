@@ -23,9 +23,9 @@
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
                         {% for categoria in categorias %}
-                        {% if categoria.seccion_id == seccion.id %}
-                        <li><a class="text-decoration-none filtroCat" categoria="{{categoria.nombre}}" href="#">{{categoria.nombre}}</a></li>
-                        {% endif %}
+                            {% if categoria.seccion_id == seccion.id %}
+                                <li><a class="text-decoration-none filtroCat" categoria="{{categoria.id}}" href="#">{{categoria.nombre}}</a></li>
+                            {% endif %}
                         {% endfor %}
                         
                     </ul>
@@ -55,52 +55,18 @@
                 <!-- Ordenación de los productos -->
                 <div class="col-md-6 pb-4">
                     <div class="d-flex">
-                        <select class="form-control sort">
-                            <option>A to Z</option>
-                            <option>Precio: de más caro a más barato</option>
-                            <option>Precio: de más barato a más caro</option>
+                        <select id="orden" class="form-control">
+                            <option sort="alfabetico">A to Z</option>
+                            <option sort="precioCaro">Precio: de más caro a más barato</option>
+                            <option sort="precioBajo">Precio: de más barato a más caro</option>
                         </select>
                     </div>
                 </div>
             </div>
 
             <!-- Muestra de los productos de la tienda -->
-            <div class="row" id = "prod">
-                {% for producto in productos %}
-                <div class="col-md-4 producto" categoria = "{{ producto.categoria }}" genero = "{{ producto.genero }}" precio={{producto.precio}}>
-                    <div class="card mb-4 product-wap rounded-0">
-                        <!-- Tarjeta del producto -->
-                        <div class="card rounded-0">
-                            {% if producto.imagen %}
-                                <img class="card-img rounded-0 img-fluid" src="{{ producto.imagen.url }}">
-                            {% else %}
-                                <img class="card-img rounded-0 img-fluid" src="{% static '/img/work_in_progress.png' %}">
-                            {% endif %}
-
-                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                <ul class="list-unstyled">
-                                    <!-- Botones para ver el producto o añadirlo al carrito directamente -->
-                                    <li><a class="btn btn-success text-white mt-2" href="#"><i class="far fa-eye"></i></a></li>
-                                    <li><a class="btn btn-success text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- Body de la tarjeta de presentación del producto -->
-                        <div class="card-body">
-                            <a href="#" class="h3 text-decoration-none">{{ producto.nombre }}</a>
-                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                <li>{{ producto.talla }}</li>
-                                <li class="pt-2">
-                                    <!--Imprimimos el precio del producto con 2 decimales -->
-                                    <p class="text-center mb-0">{{ producto.precio | floatformat:2 }}€</p>
-                                </li>
-                            </ul>
-                            
-                            
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="row" id = "contenedorProductos">
+                <!-- Aquí se muestran todos los productos cargados mediante js --> 
             </div>
 
             <!-- Paginación de los productos -->

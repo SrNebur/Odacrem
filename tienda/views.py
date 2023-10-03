@@ -1,17 +1,21 @@
 from django.shortcuts import render
 from .models import Producto,Categoria,Seccion
 
+from django.views import View
+from django.http.response import JsonResponse
+
 # Create your views here.
 def tienda(request):
     
     secciones = Seccion.objects.all()
     categorias = Categoria.objects.all()
-    parametros = {}
-    if request.method == 'GET' and len(request.GET) > 0:
-        parametros=dict(request.GET)
-        if (sexo:= request.GET['sexo']):
-            productos = Producto.objects.all().filter(genero = sexo).order_by("nombre")
-    else:
-        productos = Producto.objects.all().order_by("nombre")
-    return render(request,"tienda.html",{"productos":productos, "secciones":secciones, "categorias":categorias,"parametros":parametros})
+    return render(request,"tienda.html",{"secciones":secciones, "categorias":categorias,})
 
+class ProductoView(View):
+    def get(self,request):
+        productos = list(Producto.objects.values().order_by("nombre"))
+        if len(productos) > 0:
+            datos = {"message":"Success",'productos':productos}
+        else:
+            datos = {"message":"No se han encontrado productos disponibles"}
+        return JsonResponse(datos,safe = False)
