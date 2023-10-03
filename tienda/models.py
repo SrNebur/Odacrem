@@ -1,4 +1,6 @@
 from django.db import models
+#Libreria para realizar una elección multiple de valores
+from multiselectfield import MultiSelectField
 
 # Create your models here.
 #Mapeo ORM de las clases categoria y producto
@@ -27,11 +29,28 @@ class Categoria(models.Model):
         return self.nombre
 
 class Producto(models.Model):
+    #El primer valor es el almacenado en la base de datos, el segundo será el mostrado
+    SEXO = [
+        ("H","Hombre"),
+        ("M","Mujer"),
+        ("X","Unisex"),
+    ]
+
+    TALLAS = [
+        ("S", "S"),
+        ("M", "M"),
+        ("L", "L"),
+        ("XL", "XL"),
+    ]
     nombre = models.CharField(max_length = 50)
-    categorias = models.ManyToManyField(Categoria)
+    categoria = models.ForeignKey(Categoria,on_delete = models.PROTECT)
     imagen = models.ImageField(upload_to = "tienda", null = True, blank = True)
     precio = models.FloatField()
     disponibilidad = models.BooleanField( default = True)
+    #Almacenamos en la base de datos solo estas opciones
+    genero = models.CharField(max_length = 1, choices = SEXO, default = "X")
+    talla = MultiSelectField(max_choices = 4,max_length = 8, choices = TALLAS, blank = True, null = True)
+
 
     class Meta:
         verbose_name = "producto"

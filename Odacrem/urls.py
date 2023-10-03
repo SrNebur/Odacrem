@@ -17,7 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+#Importamos static y settings para acceder a los archivos y a las constantes de configuración
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("home.urls")),
+    path('tienda/',include("tienda.urls")),
+
 ]
+
+#Agregamos al patron de urls aquella que servirá para servir los documentos de imagenes, indicandole la ruta con las constantes de configuración.
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

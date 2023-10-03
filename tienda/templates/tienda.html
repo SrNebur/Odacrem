@@ -1,0 +1,131 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/tienda.css' %}">
+{% endblock %}
+
+{% block content %}
+{% with param=request.GET %}
+{% endwith %}
+<div class="container py-5">
+    <!-- Indice de busqueda por secciones -->
+    <div class="row">
+
+        <div class="col-lg-3">
+            <h1 class="h2 pb-4">Secciones</h1>
+            <ul class="list-unstyled accordion">
+                {% for seccion in secciones %}
+                <li class="pb-3">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
+                        {{ seccion.nombre }}
+                        <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
+                    </a>
+                    <ul class="collapse show list-unstyled pl-3">
+                        {% for categoria in categorias %}
+                        {% if categoria.seccion_id == seccion.id %}
+                        <li><a class="text-decoration-none filtroCat" categoria="{{categoria.nombre}}" href="#">{{categoria.nombre}}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Indice para busqueda por generos -->
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-inline shop-top-menu pb-3 pt-1">
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none mr-3 sinFiltro" href="#">Todos</a>
+                        </li>
+                        <li class="list-inline-item">
+                                <a class="h3 text-dark text-decoration-none filtroGen" genero="H" href="#">Hombre</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none filtroGen" genero="M" href="#">Mujer</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none filtroGen" genero="X" href="#">Unisex</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Ordenación de los productos -->
+                <div class="col-md-6 pb-4">
+                    <div class="d-flex">
+                        <select class="form-control sort">
+                            <option>A to Z</option>
+                            <option>Precio: de más caro a más barato</option>
+                            <option>Precio: de más barato a más caro</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Muestra de los productos de la tienda -->
+            <div class="row" id = "prod">
+                {% for producto in productos %}
+                <div class="col-md-4 producto" categoria = "{{ producto.categoria }}" genero = "{{ producto.genero }}" precio={{producto.precio}}>
+                    <div class="card mb-4 product-wap rounded-0">
+                        <!-- Tarjeta del producto -->
+                        <div class="card rounded-0">
+                            {% if producto.imagen %}
+                                <img class="card-img rounded-0 img-fluid" src="{{ producto.imagen.url }}">
+                            {% else %}
+                                <img class="card-img rounded-0 img-fluid" src="{% static '/img/work_in_progress.png' %}">
+                            {% endif %}
+
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <!-- Botones para ver el producto o añadirlo al carrito directamente -->
+                                    <li><a class="btn btn-success text-white mt-2" href="#"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Body de la tarjeta de presentación del producto -->
+                        <div class="card-body">
+                            <a href="#" class="h3 text-decoration-none">{{ producto.nombre }}</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>{{ producto.talla }}</li>
+                                <li class="pt-2">
+                                    <!--Imprimimos el precio del producto con 2 decimales -->
+                                    <p class="text-center mb-0">{{ producto.precio | floatformat:2 }}€</p>
+                                </li>
+                            </ul>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación de los productos -->
+            <div div="row">
+                <ul class="pagination pagination-lg justify-content-end">
+                    <li class="page-item disabled">
+                        <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#"
+                            tabindex="-1">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark"
+                            href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End Content -->
+{% endblock %}
+
+{% block script%}
+    <script src="{% static '/js/tienda.js' %}"></script>
+{% endblock %}

@@ -49,7 +49,7 @@
                             <a class="nav-link" href="{% url 'Home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Tienda</a>
+                            <a class="nav-link" href="{% url 'Tienda' %}">Tienda</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">Sobre nosotros</a>
@@ -151,7 +151,7 @@
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Más Información</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Home</a></li>
+                        <li><a class="text-decoration-none" href="{% url 'Home' %}">Home</a></li>
                         <li><a class="text-decoration-none" href="#">Sobre nosotros</a></li>
                         <li><a class="text-decoration-none" href="#">Donde estamos</a></li>
                         <li><a class="text-decoration-none" href="#">Contacto</a></li>
@@ -211,8 +211,7 @@
     <!-- Fin Footer -->
 
     <!-- Scripts -->
-    <script src="{% static '/js/jquery-1.11.0.min.js' %}"></script>
-    <script src="{% static '/js/jquery-migrate-1.2.1.min.js' %}"></script>
+    <script src="{% static '/js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
     <!-- Bloque de contenido para scripts propios -->
     {% block script%}
