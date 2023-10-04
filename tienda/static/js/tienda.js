@@ -1,21 +1,30 @@
 
 'use strict';
+
+//Enum que contiene los valores del atributo sort de cada opcion del select para el orden
+const Orden = {
+  Alfabetico: 'alfabetico',
+  PrecioCaro: 'precioCaro',
+  PrecioBarato: 'precioBajo',
+}
+
 $(document).ready(
   function () {
-
-    //Carga de los productos en la tienda
-    var productos={};
-    var productosActivos = [];
+    //Variables para contener los productos que se estan mostrando actualmente, los filtros activos y el orden que tienen actualmente
+    var productos = {};
+    var filtrosActivos = {};
+    //Ponemos el orden por alfabetico, es el que nos da el backend por defecto
+    document.getElementById('orden').selectedIndex = 0;
+    //Petición inicial para la carga de todos los productos
     let request = new XMLHttpRequest();
-    request.open("GET", "http://127.0.0.1:8000/tienda/productos")
-    request.send()
-    request.responseType = "json"
+    let urlPeticion = "http://127.0.0.1:8000/tienda/productos/"
+    request.open("GET", urlPeticion);
+    request.send();
+    request.responseType = "json";
     request.onload = function () {
-      productos = productosActivos = request.response["productos"];
+      productos = request.response["productos"]
       cargarProductos(productos)
     }
-    //Fin carga productos de la tienda
-
 
     // Inicio acordeon
     var all_panels = $('.accordion > li > ul').hide();
@@ -34,65 +43,102 @@ $(document).ready(
 
     //Mostrar todos los productos
     $('.sinFiltro').click(function () {
-      $(this).addClass('active')
-      productosActivos = productos;
-      cargarProductos(productosActivos);
+      //Borramos todos los filtros
+      filtrosActivos = {}
+      //Realizamos la peticion para obtener todos los productos
+      let request = new XMLHttpRequest();
+      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/"
+      request.open("GET", urlPeticion);
+      request.send();
+      request.responseType = "json";
+      request.onload = function () {
+        productos = ordenaProductos(request.response["productos"]);
+        cargarProductos(productos);
+      }
+
     })
     //Fin muestra
 
     //Filtrado de los productos por genero
     $('.filtroGen').click(function () {
-      $(this).addClass('active')
+      //Obtenemos el genero seleccionado
       let generoSeleccionado = $(this).attr('genero');
-      productosActivos=[];
-      productos.forEach(producto => {
-        if(generoSeleccionado == producto.genero){
-          productosActivos.push(producto);
-        }
-      })
-      cargarProductos(productosActivos);
+      //Lo añadimos como filtro activo
+      filtrosActivos['genero'] = generoSeleccionado;
+      //Preparamos el filtrado
+      let filtrado = "?genero=" + generoSeleccionado
+      //Miramos si hay una categoria seleccionada, en cuyo caso se aplica tambien
+      if (filtrosActivos["categoria"] != undefined) {
+        filtrado += "&categoria=" + filtrosActivos["categoria"];
+      }
+      //Hacemos la peticion
+      let request = new XMLHttpRequest();
+      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado
+      request.open("GET", urlPeticion);
+      request.send();
+      request.responseType = "json";
+      request.onload = function () {
+        productos = ordenaProductos(request.response["productos"]);
+        cargarProductos(productos);
+      }
     })
     //Fin filtro
 
     //Filtrado de los productos por categoria
     $('.filtroCat').click(function () {
-      $(this).addClass('active')
+      //Obtenemos la categoria seleccionada
       let categoriaSeleccionada = $(this).attr('categoria');
-      productosActivos = [];
-      productos.forEach(producto => {
-        if(categoriaSeleccionada == producto.categoria_id){
-          productosActivos.push(producto);
-        }
-      })
-      cargarProductos(productosActivos);
+      //La añadimos como filtro activo
+      filtrosActivos['categoria'] = categoriaSeleccionada;
+      //Preparamos el filtrado
+      let filtrado = "?categoria=" + categoriaSeleccionada;
+      //Miramos is tambien hay un filtro de genero, en cuyo caso se aplica tambien
+      if (filtrosActivos["genero"] != undefined) {
+        filtrado += "&genero=" + filtrosActivos["genero"];
+      }
+      //Hacemos la peticion
+      let request = new XMLHttpRequest();
+      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado
+      request.open("GET", urlPeticion);
+      request.send();
+      request.responseType = "json";
+      request.onload = function () {
+        productos = ordenaProductos(request.response["productos"]);
+        cargarProductos(productos);
+      }
 
     })
     //Fin filtro
 
-    $('#orden').on("change", function () {
-      switch (document.getElementById("orden").options[ this.selectedIndex ].getAttribute("sort")){
-        case 'precioCaro':
-          productosActivos.sort(function(a,b){return b.precio - a.precio});
-          break;
-        case 'precioBajo':
-          productosActivos.sort(function(a,b){return a.precio - b.precio});
-          break;
-        default:
-          productosActivos.sort(function(a, b){
-            if(a.nombre == b.nombre){
-              return 0
-            }
-            return a.nombre > b.nombre? 1:-1;
-          });
-          break;
-
-      }
-      cargarProductos(productosActivos)
+    $('#orden').on('change', function () {
+      productos = ordenaProductos(productos);
+      console.log(productos)
+      cargarProductos(productos);
     })
 
 
-
   });
+
+function ordenaProductos(productos) {
+  switch (document.getElementById('orden').options[document.getElementById('orden').selectedIndex].getAttribute("sort")) {
+    case Orden.PrecioCaro:
+      productos.sort(function (a, b) { return b.precio - a.precio });
+      break;
+    case Orden.PrecioBarato:
+      productos.sort(function (a, b) { return a.precio - b.precio });
+      break;
+    //El orden alfabetico será por defecto
+    default:
+      productos.sort(function (a, b) {
+        if (a.nombre == b.nombre) {
+          return 0
+        }
+        return a.nombre > b.nombre ? 1 : -1;
+      });
+      break;
+  }
+  return productos
+}
 
 //Función encargada de cargar todos los productos pasados
 function cargarProductos(productosElegidos) {
