@@ -23,11 +23,12 @@
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
                         {% for categoria in categorias %}
-                            {% if categoria.seccion_id == seccion.id %}
-                                <li><a class="text-decoration-none filtroCat" categoria="{{categoria.id}}" href="#">{{categoria.nombre}}</a></li>
-                            {% endif %}
+                        {% if categoria.seccion_id == seccion.id %}
+                        <li><a class="text-decoration-none filtroCat" categoria="{{categoria.id}}"
+                                href="#">{{categoria.nombre}}</a></li>
+                        {% endif %}
                         {% endfor %}
-                        
+
                     </ul>
                 </li>
                 {% endfor %}
@@ -42,7 +43,7 @@
                             <a class="h3 text-dark text-decoration-none mr-3 sinFiltro" href="#">Todos</a>
                         </li>
                         <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none filtroGen" genero="H" href="#">Hombre</a>
+                            <a class="h3 text-dark text-decoration-none filtroGen" genero="H" href="#">Hombre</a>
                         </li>
                         <li class="list-inline-item">
                             <a class="h3 text-dark text-decoration-none filtroGen" genero="M" href="#">Mujer</a>
@@ -65,25 +66,16 @@
             </div>
 
             <!-- Muestra de los productos de la tienda -->
-            <div class="row" id = "contenedorProductos">
-                <!-- Aquí se muestran todos los productos cargados mediante js --> 
+            <div class="row" id="contenedorProductos">
+                <!-- Aquí se muestran todos los productos cargados mediante js -->
             </div>
 
             <!-- Paginación de los productos -->
-            <div div="row">
-                <ul class="pagination pagination-lg justify-content-end">
-                    <li class="page-item disabled">
-                        <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#"
-                            tabindex="-1">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark"
-                            href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
-                    </li>
-                </ul>
+            <div id="pagination" class="pagination pagination-lg justify-content-end">
+                <button id="pagAnt" type="button" class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg"><</button>
+                <button id="pag1" type="button" class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg btn-success">1</button>
+                <button id="pag2" type="button" class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">2</button>
+                <button id="pagSig" type="button" class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">></button>
             </div>
         </div>
 
@@ -93,5 +85,5 @@
 {% endblock %}
 
 {% block script%}
-    <script src="{% static '/js/tienda.js' %}"></script>
+<script src="{% static '/js/tienda.js' %}"></script>
 {% endblock %}

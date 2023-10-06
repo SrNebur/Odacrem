@@ -24,6 +24,7 @@ $(document).ready(
     request.onload = function () {
       productos = request.response["productos"]
       cargarProductos(productos)
+      
     }
 
     // Inicio acordeon
@@ -107,19 +108,34 @@ $(document).ready(
         cargarProductos(productos);
       }
 
-    })
+    });
     //Fin filtro
 
+    //Ordenacion de los productos cuando se cambia el desplegable
     $('#orden').on('change', function () {
       productos = ordenaProductos(productos);
       console.log(productos)
       cargarProductos(productos);
-    })
+    });
+    //Fin orden productos
 
+    reiniciaPaginacion();
+
+    
+    $('#pagAnt').click(function(){pagAnt(productos)});
+    $('#pag1').click(function(){
+      if(document.getElementById("pag1").innerHTML != 1){
+        pagAnt(productos);
+      }
+    });
+    $('#pagSig').click(function(){pagSig(productos)});
+    $('#pag2').click(function(){pagSig(productos)});
+    
 
   });
-
+//Funcion encargada de ordenar los productos en funcion del valor del desplegable
 function ordenaProductos(productos) {
+  //Se obtiene el valor del desplegable y se ejecutará un case con una funcion sort
   switch (document.getElementById('orden').options[document.getElementById('orden').selectedIndex].getAttribute("sort")) {
     case Orden.PrecioCaro:
       productos.sort(function (a, b) { return b.precio - a.precio });
@@ -139,6 +155,7 @@ function ordenaProductos(productos) {
   }
   return productos
 }
+//Fin ordenaProductos
 
 //Función encargada de cargar todos los productos pasados
 function cargarProductos(productosElegidos) {
@@ -183,4 +200,41 @@ function cargarProductos(productosElegidos) {
   })
 
   //actualizarBotonesAgregar();
+}
+//Fin cargarProductos
+
+//Funciones que se encargan de la paginacion
+function reiniciaPaginacion(){
+  $("#pagAnt").prop("disabled", true);
+  $("#pagination > button").removeClass("btn-success")
+  $("#pag1").addClass("btn-success")
+}
+
+function pagSig(productos){
+  let pag2 = document.getElementById("pag2");
+  $('#pagAnt').prop("disabled", false);
+  if (pag2.innerHTML == Math.ceil(productos.length / 9)){
+    $("#pagination > button").removeClass("btn-success");
+    $("#pag2").addClass("btn-success");
+    $('#pagSig').prop("disabled", true);
+  }else{
+    document.getElementById("pag1").innerHTML = pag2.innerHTML
+    pag2.innerHTML = parseInt(pag2.innerHTML) + 1
+  }
+}
+
+function pagAnt(productos){
+  let pag2 = document.getElementById("pag2");
+  $('#pagSig').prop("disabled", false);
+  if (pag2.innerHTML == Math.ceil(productos.length / 9) && pag2.classList.contains("btn-success")){
+    $("#pag2").removeClass("btn-success");
+    $("#pag1").addClass("btn-success");
+  }else{
+    let pag1 = document.getElementById("pag1");
+    pag2.innerHTML = pag1.innerHTML;
+    pag1.innerHTML = parseInt(pag2.innerHTML) - 1;
+    if(pag1.innerHTML == 1){
+      $('#pagAnt').prop("disabled", true);;
+    }
+  }  
 }
