@@ -72,14 +72,14 @@ $(document).ready(
     $('.filtroGen').click(function () {
       //Obtenemos el seleccionado anteriormente
       let selectAnt = $('.selectedGen');
-      //Miramos si es el anteriormente seleccionado
-      let filtroAnterior = selectAnt.text() == $(this).text()
       //Le quitamos a la seleccion anterior la X
       selectAnt.text(selectAnt.text().replace("X ", ""))
       //Quitamos el selected de cualquier filtro anterior de categoria
       selectAnt.removeClass('selectedGen');
+      //Se define la variable de filtrado
       let filtrado = ""
-      if (!filtroAnterior) {
+      //Miramos si estamos eliminando el filtro o si estamos modificandolo
+      if (selectAnt.attr('genero') == $(this).attr('genero')) {
         filtrosActivos['genero'] = undefined
       } else {
         //Añadimos una X al nuevo filtro
@@ -97,7 +97,7 @@ $(document).ready(
 
       //Miramos si hay una categoria seleccionada, en cuyo caso se aplica tambien
       if (filtrosActivos["categoria"] != undefined) {
-        filtrado += "&categoria=" + filtrosActivos["categoria"];
+        filtrado += (filtrado == "") ? "?" : "&" + "categoria=" + filtrosActivos["categoria"];
       }
       //Hacemos la peticion
       let request = new XMLHttpRequest();
@@ -118,20 +118,35 @@ $(document).ready(
 
     //Filtrado de los productos por categoria
     $('.filtroCat').click(function () {
-      //Quitamo el selected de cualquier filtro anterior de categoria
-      $('.selectedCat').removeClass('selectedCat');
-      //Ponemos el filtro como activo
-      $(this).addClass('selectedCat');
-      //Obtenemos la categoria seleccionada
-      let categoriaSeleccionada = $(this).attr('categoria');
-      //La añadimos como filtro activo
-      filtrosActivos['categoria'] = categoriaSeleccionada;
-      //Preparamos el filtrado
-      let filtrado = "?categoria=" + categoriaSeleccionada;
+      //Obtenemos el seleccionado anteriormente
+      let selectAnt = $('.selectedCat');
+      //Le quitamos a la seleccion anterior la X
+      selectAnt.text(selectAnt.text().replace("X ", ""))
+      //Quitamos el selected de cualquier filtro anterior de categoria
+      selectAnt.removeClass('selectedCat');
+      //Se define la variable de filtrado
+      let filtrado = ""
+      //Miramos si estamos eliminando el filtro o si estamos modificandolo
+      if (selectAnt.attr('categoria') == $(this).attr('categoria')) {
+        filtrosActivos['categoria'] = undefined
+      } else {
+        //Añadimos una X al nuevo filtro
+        $(this).text("X " + $(this).text());
+        //Ponemos el filtro como activo
+        $(this).addClass('selectedCat');
+        //Obtenemos la categoria seleccionada
+        let categoriaSeleccionada = $(this).attr('categoria');
+        //La añadimos como filtro activo
+        filtrosActivos['categoria'] = categoriaSeleccionada;
+        //Preparamos el filtrado
+        filtrado = "?categoria=" + categoriaSeleccionada;
+      }
+
       //Miramos is tambien hay un filtro de genero, en cuyo caso se aplica tambien
       if (filtrosActivos["genero"] != undefined) {
-        filtrado += "&genero=" + filtrosActivos["genero"];
+        filtrado += (filtrado == "") ? "?" : "&" + "genero=" + filtrosActivos["genero"];
       }
+
       //Hacemos la peticion
       let request = new XMLHttpRequest();
       let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado
@@ -147,7 +162,6 @@ $(document).ready(
         reiniciaPaginacion(productos.length);
 
       }
-
     });
     //Fin filtro
 
@@ -158,7 +172,7 @@ $(document).ready(
     //Ordenacion de los productos cuando se cambia el desplegable
     $('#orden').on('change', function () {
       //Reiniciamos la paginacion
-      reiniciaPaginacion();
+      reiniciaPaginacion(productos.length);
       //Ordenamos los productos
       productos = ordenaProductos(productos);
       //Cargamos los productos que pertenecen a la pagina 1
@@ -250,18 +264,26 @@ function ordenaProductos(productos) {
 function cargarProductos(productosElegidos) {
   //Borramos todos los productos anteriores
   $('.producto').remove();
-  //Mostramos los productos pasados
-  productosElegidos.forEach(producto => {
-
+  if (productosElegidos.length == 0) {
     const div = document.createElement("div");
     div.classList.add("producto");
-    div.classList.add("col-md-4");
-    let htmlProducto = `
+    let htmlProducto = `<h2 class="text-center">Lo sentimos, no disponemos de ese tipo de artículos</h2>
+    <p class="text-center">Estamos trabajando para ofrecer una mejor selección en el futuro. Le pedimos disculpas por cualquier inconveniente.</p>`
+    div.innerHTML = htmlProducto;
+    document.getElementById("contenedorProductos").append(div);
+  } else {
+    //Mostramos los productos pasados
+    productosElegidos.forEach(producto => {
+
+      const div = document.createElement("div");
+      div.classList.add("producto");
+      div.classList.add("col-md-4");
+      let htmlProducto = `
       <div class="card mb-4 product-wap rounded-0">
         <!-- Tarjeta del producto -->
         <div class="card rounded-0">`
-    htmlProducto += producto.imagen == "" ? `<img class="card-img rounded-0 img-fluid" src="../static/img/work_in_progress.png"></img>` : `<img class="card-img rounded-0 img-fluid" src="../../media/${producto.imagen}"></img>`
-    htmlProducto += `
+      htmlProducto += producto.imagen == "" ? `<img class="card-img rounded-0 img-fluid" src="../static/img/work_in_progress.png"></img>` : `<img class="card-img rounded-0 img-fluid" src="../../media/${producto.imagen}"></img>`
+      htmlProducto += `
         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
             <ul class="list-unstyled">
               <!-- Botones para ver el producto o añadirlo al carrito directamente -->
@@ -283,12 +305,12 @@ function cargarProductos(productosElegidos) {
         </div>
       </div>`;
 
-    div.innerHTML = htmlProducto;
+      div.innerHTML = htmlProducto;
 
-    document.getElementById("contenedorProductos").append(div);
-  })
+      document.getElementById("contenedorProductos").append(div);
+    })
 
-
+  }
   //actualizarBotonesAgregar();
 }
 //Fin cargarProductos
@@ -296,18 +318,25 @@ function cargarProductos(productosElegidos) {
 //Funciones que se encargan de la paginacion
 function reiniciaPaginacion(tamanyoProd) {
 
-  $("#pagAnt").prop("disabled", true);
-  $("#pagination > button").removeClass("btn-success")
-  $("#pag1").addClass("btn-success")
-  document.getElementById("pag1").innerHTML = "1";
-
-  if (tamanyoProd <= nProductosPagina) {
-    $("#pag2").hide()
-    $('#pagSig').prop("disabled", true);
+  //Comprobamos que el tamaño sea distinto de 0
+  if (tamanyoProd <= 0) {
+    $("#pagination").hide()
   } else {
-    $("#pag2").show();
-    $('#pagSig').prop("disabled", false);
-    document.getElementById("pag2").innerHTML = "2";
+
+    $("#pagination").show()
+    $("#pagAnt").prop("disabled", true);
+    $("#pagination > button").removeClass("btn-success")
+    $("#pag1").addClass("btn-success")
+    document.getElementById("pag1").innerHTML = "1";
+
+    if (tamanyoProd <= nProductosPagina) {
+      $("#pag2").hide()
+      $('#pagSig').prop("disabled", true);
+    } else {
+      $("#pag2").show();
+      $('#pagSig').prop("disabled", false);
+      document.getElementById("pag2").innerHTML = "2";
+    }
   }
 }
 
