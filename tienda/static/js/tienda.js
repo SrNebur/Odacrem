@@ -8,6 +8,9 @@ const Orden = {
   PrecioBarato: 'precioBajo',
 }
 
+//Constante que tiene el numero de productos por pagina
+const nProductosPagina = 9;
+
 $(document).ready(
   function () {
     //Variables para contener los productos que se estan mostrando actualmente, los filtros activos y el orden que tienen actualmente
@@ -22,27 +25,28 @@ $(document).ready(
     request.send();
     request.responseType = "json";
     request.onload = function () {
-      productos = request.response["productos"]
-      cargarProductos(productos)
-      
+      //Se guardan los productos ordenados
+      productos = ordenaProductos(request.response["productos"])
+      //Cargamos los productos de la primera pagina
+      cargarProductos(sacaProductosPaginacion(productos, 1))
+      //Reiniciamos la paginacion
+      reiniciaPaginacion(productos.length);
     }
 
     // Inicio acordeon
-    var all_panels = $('.accordion > li > ul').hide();
+    $('.accordion > li > ul').hide();
 
     $('.accordion > li > a').click(function () {
       var target = $(this).next();
       if (!target.hasClass('active')) {
-        all_panels.removeClass('active').slideUp();
         target.addClass('active').slideDown();
       } else {
         target.removeClass('active').slideUp();
       }
-      return false;
     });
     // Fin acordeon
 
-    //Mostrar todos los productos
+    //Quitar filtros
     $('.sinFiltro').click(function () {
       //Borramos todos los filtros
       filtrosActivos = {}
@@ -53,40 +57,71 @@ $(document).ready(
       request.send();
       request.responseType = "json";
       request.onload = function () {
+        //Se guardan los productos ordenados
         productos = ordenaProductos(request.response["productos"]);
-        cargarProductos(productos);
+        //Cargamos los productos de la primera pagina
+        cargarProductos(sacaProductosPaginacion(productos, 1));
+        //Reiniciamos la paginacion
+        reiniciaPaginacion(productos.length);
       }
 
     })
-    //Fin muestra
+    //Fin quita filtro
 
     //Filtrado de los productos por genero
     $('.filtroGen').click(function () {
-      //Obtenemos el genero seleccionado
-      let generoSeleccionado = $(this).attr('genero');
-      //Lo añadimos como filtro activo
-      filtrosActivos['genero'] = generoSeleccionado;
-      //Preparamos el filtrado
-      let filtrado = "?genero=" + generoSeleccionado
+      //Obtenemos el seleccionado anteriormente
+      let selectAnt = $('.selectedGen');
+      //Miramos si es el anteriormente seleccionado
+      let filtroAnterior = selectAnt.text() == $(this).text()
+      //Le quitamos a la seleccion anterior la X
+      selectAnt.text(selectAnt.text().replace("X ", ""))
+      //Quitamos el selected de cualquier filtro anterior de categoria
+      selectAnt.removeClass('selectedGen');
+      let filtrado = ""
+      if (!filtroAnterior) {
+        filtrosActivos['genero'] = undefined
+      } else {
+        //Añadimos una X al nuevo filtro
+        $(this).text("X " + $(this).text());
+        //Ponemos el filtro como activo
+        $(this).addClass('selectedGen');
+        //Obtenemos el genero seleccionado
+        let generoSeleccionado = $(this).attr('genero');
+        //Lo añadimos como filtro activo
+        filtrosActivos['genero'] = generoSeleccionado;
+        //Preparamos el filtrado
+        filtrado += "?genero=" + generoSeleccionado;
+      }
+
+
       //Miramos si hay una categoria seleccionada, en cuyo caso se aplica tambien
       if (filtrosActivos["categoria"] != undefined) {
         filtrado += "&categoria=" + filtrosActivos["categoria"];
       }
       //Hacemos la peticion
       let request = new XMLHttpRequest();
-      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado
+      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado;
       request.open("GET", urlPeticion);
       request.send();
       request.responseType = "json";
       request.onload = function () {
+        //Se guardan los productos ordenados
         productos = ordenaProductos(request.response["productos"]);
-        cargarProductos(productos);
+        //Cargamos los productos de la primera pagina
+        cargarProductos(sacaProductosPaginacion(productos, 1));
+        //Reiniciamos la paginacion
+        reiniciaPaginacion(productos.length);
       }
     })
     //Fin filtro
 
     //Filtrado de los productos por categoria
     $('.filtroCat').click(function () {
+      //Quitamo el selected de cualquier filtro anterior de categoria
+      $('.selectedCat').removeClass('selectedCat');
+      //Ponemos el filtro como activo
+      $(this).addClass('selectedCat');
       //Obtenemos la categoria seleccionada
       let categoriaSeleccionada = $(this).attr('categoria');
       //La añadimos como filtro activo
@@ -104,35 +139,89 @@ $(document).ready(
       request.send();
       request.responseType = "json";
       request.onload = function () {
-        productos = ordenaProductos(request.response["productos"]);
-        cargarProductos(productos);
+        //Se guardan los productos ordenados
+        productos = ordenaProductos(request.response["productos"])
+        //Cargamos los productos de la primera pagina
+        cargarProductos(sacaProductosPaginacion(productos, 1))
+        //Reiniciamos la paginacion
+        reiniciaPaginacion(productos.length);
+
       }
 
     });
     //Fin filtro
 
+    //Buscamos los dos botones para paginar los productos
+    let pag2 = document.getElementById("pag2");
+    let pag1 = document.getElementById("pag1");
+
     //Ordenacion de los productos cuando se cambia el desplegable
     $('#orden').on('change', function () {
+      //Reiniciamos la paginacion
+      reiniciaPaginacion();
+      //Ordenamos los productos
       productos = ordenaProductos(productos);
-      console.log(productos)
-      cargarProductos(productos);
+      //Cargamos los productos que pertenecen a la pagina 1
+      cargarProductos(sacaProductosPaginacion(productos, 1));
     });
     //Fin orden productos
 
-    reiniciaPaginacion();
-
-    
-    $('#pagAnt').click(function(){pagAnt(productos)});
-    $('#pag1').click(function(){
-      if(document.getElementById("pag1").innerHTML != 1){
+    //Asinamos al boton de volver a la pagina anterior sus funciones
+    $('#pagAnt').click(function () {
+      //Volvera a la pagina anterior
+      pagAnt(productos);
+      //Se obtiene el numero de pagina que se queda marcado como actual
+      let num = pag1.innerHTML;
+      if (pag2.classList.contains("btn-success")) {
+        num = pag2.innerHTML;
+      }
+      //Cargamos los productos de la pagina actual
+      cargarProductos(sacaProductosPaginacion(productos, num));
+    });
+    //Asinamos al boton pag1
+    $('#pag1').click(function () {
+      //Solo actuara cuando el elemento marcado sea el pag2
+      if (pag2.classList.contains("btn-success")) {
+        //pasamos a la pagina anterior
         pagAnt(productos);
+        //Miramos el numero que esta marcado y lo guardamos en num
+        let num = pag1.innerHTML;
+        if (pag2.classList.contains("btn-success")) {
+          num = pag2.innerHTML;
+        }
+        //Cargamos los productos de la pagina indicada
+        cargarProductos(sacaProductosPaginacion(productos, num));
       }
     });
-    $('#pagSig').click(function(){pagSig(productos)});
-    $('#pag2').click(function(){pagSig(productos)});
-    
+    //Asinamos al boton de siguiente a la pagina anterior sus funciones
+    $('#pagSig').click(function () {
+      //Pasara a la pagina siguiente
+      pagSig(productos);
+      //Miramos el numero que esta marcado y lo guardamos en num
+      let num = pag1.innerHTML;
+      if (pag2.classList.contains("btn-success")) {
+        num = pag2.innerHTML;
+      }
+      //Cargamos los productos de la pagina indicada
+      cargarProductos(sacaProductosPaginacion(productos, num));
+    });
+    //Asinamos al boton pag2
+    $('#pag2').click(function () {
+      //Pasamos a la pagina siguiente
+      pagSig(productos)
+      //Miramos el numero que esta marcado y lo guardamos en num
+      let num = pag1.innerHTML;
+      if (pag2.classList.contains("btn-success")) {
+        num = pag2.innerHTML;
+      }
+      //Cargamos los productos de la pagina indicada
+      cargarProductos(sacaProductosPaginacion(productos, num));
+    });
+
 
   });
+//Fin $(document).ready
+
 //Funcion encargada de ordenar los productos en funcion del valor del desplegable
 function ordenaProductos(productos) {
   //Se obtiene el valor del desplegable y se ejecutará un case con una funcion sort
@@ -199,42 +288,66 @@ function cargarProductos(productosElegidos) {
     document.getElementById("contenedorProductos").append(div);
   })
 
+
   //actualizarBotonesAgregar();
 }
 //Fin cargarProductos
 
 //Funciones que se encargan de la paginacion
-function reiniciaPaginacion(){
+function reiniciaPaginacion(tamanyoProd) {
+
   $("#pagAnt").prop("disabled", true);
   $("#pagination > button").removeClass("btn-success")
   $("#pag1").addClass("btn-success")
+  document.getElementById("pag1").innerHTML = "1";
+
+  if (tamanyoProd <= nProductosPagina) {
+    $("#pag2").hide()
+    $('#pagSig').prop("disabled", true);
+  } else {
+    $("#pag2").show();
+    $('#pagSig').prop("disabled", false);
+    document.getElementById("pag2").innerHTML = "2";
+  }
 }
 
-function pagSig(productos){
+//Funcion encargada de pasar a la pagina siguiente, en todo lo referente a estetica
+function pagSig(productos) {
   let pag2 = document.getElementById("pag2");
   $('#pagAnt').prop("disabled", false);
-  if (pag2.innerHTML == Math.ceil(productos.length / 9)){
+  if (pag2.innerHTML == Math.ceil(productos.length / nProductosPagina)) {
     $("#pagination > button").removeClass("btn-success");
     $("#pag2").addClass("btn-success");
     $('#pagSig').prop("disabled", true);
-  }else{
+  } else {
     document.getElementById("pag1").innerHTML = pag2.innerHTML
     pag2.innerHTML = parseInt(pag2.innerHTML) + 1
   }
 }
 
-function pagAnt(productos){
+//Funcion encargada de pasar a la pagina anterior, en todo lo referente a estetica
+function pagAnt(productos) {
   let pag2 = document.getElementById("pag2");
   $('#pagSig').prop("disabled", false);
-  if (pag2.innerHTML == Math.ceil(productos.length / 9) && pag2.classList.contains("btn-success")){
+  if (pag2.innerHTML == Math.ceil(productos.length / nProductosPagina) && pag2.classList.contains("btn-success")) {
     $("#pag2").removeClass("btn-success");
     $("#pag1").addClass("btn-success");
-  }else{
+  } else {
     let pag1 = document.getElementById("pag1");
     pag2.innerHTML = pag1.innerHTML;
     pag1.innerHTML = parseInt(pag2.innerHTML) - 1;
-    if(pag1.innerHTML == 1){
-      $('#pagAnt').prop("disabled", true);;
-    }
-  }  
+  }
+  if (pag1.innerHTML == 1) {
+    $('#pagAnt').prop("disabled", true);;
+  }
 }
+
+//Funcion encargada de generar el array de productos que se han de mostrar 
+function sacaProductosPaginacion(productos, nPagina) {
+  let maxProductoMostrar = nPagina * nProductosPagina;
+  let productoInicial = maxProductoMostrar - nProductosPagina;
+  return productos.slice(productoInicial, maxProductoMostrar)
+}
+
+
+

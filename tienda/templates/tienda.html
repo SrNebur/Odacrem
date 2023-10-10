@@ -13,19 +13,18 @@
     <div class="row">
 
         <div class="col-lg-3">
-            <h1 class="h2 pb-4">Secciones</h1>
+            <h1 class="h2 pb-4"></h1>
             <ul class="list-unstyled accordion">
                 {% for seccion in secciones %}
                 <li class="pb-3">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none">
                         {{ seccion.nombre }}
                         <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
                         {% for categoria in categorias %}
                         {% if categoria.seccion_id == seccion.id %}
-                        <li><a class="text-decoration-none filtroCat" categoria="{{categoria.id}}"
-                                href="#">{{categoria.nombre}}</a></li>
+                        <li><a class="text-decoration-none filtroCat" categoria="{{categoria.id}}" href="#">{{categoria.nombre}}</a></li>
                         {% endif %}
                         {% endfor %}
 
@@ -39,9 +38,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <ul class="list-inline shop-top-menu pb-3 pt-1">
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3 sinFiltro" href="#">Todos</a>
-                        </li>
                         <li class="list-inline-item">
                             <a class="h3 text-dark text-decoration-none filtroGen" genero="H" href="#">Hombre</a>
                         </li>

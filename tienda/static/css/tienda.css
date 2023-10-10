@@ -49,7 +49,19 @@
     color: #000;
 }
 
+.selectedGen{
+    color: #f71515 !important;
+}
+
+.selectedCat{
+    color: #f71515 !important;
+}
+
+.selectedCat a:hover {
+    color: #f71515 !important;
+}
+
 .accordion a:hover {
-    color: #333d4a;
+    color: #69bb7e;
 }
 
