@@ -11,27 +11,17 @@ const Orden = {
 //Constante que tiene el numero de productos por pagina
 const nProductosPagina = 9;
 
+//Variable global que tiene los productos seleccionados actualmente
+var productos = {};
+
 $(document).ready(
   function () {
-    //Variables para contener los productos que se estan mostrando actualmente, los filtros activos y el orden que tienen actualmente
-    var productos = {};
+    //Variable para contener los filtros activos
     var filtrosActivos = {};
     //Ponemos el orden por alfabetico, es el que nos da el backend por defecto
     document.getElementById('orden').selectedIndex = 0;
     //Petición inicial para la carga de todos los productos
-    let request = new XMLHttpRequest();
-    let urlPeticion = "http://127.0.0.1:8000/tienda/productos/"
-    request.open("GET", urlPeticion);
-    request.send();
-    request.responseType = "json";
-    request.onload = function () {
-      //Se guardan los productos ordenados
-      productos = ordenaProductos(request.response["productos"])
-      //Cargamos los productos de la primera pagina
-      cargarProductos(sacaProductosPaginacion(productos, 1))
-      //Reiniciamos la paginacion
-      reiniciaPaginacion(productos.length);
-    }
+    peticionProductos();
 
     // Inicio acordeon
     $('.accordion > li > ul').hide();
@@ -46,27 +36,7 @@ $(document).ready(
     });
     // Fin acordeon
 
-    //Quitar filtros
-    $('.sinFiltro').click(function () {
-      //Borramos todos los filtros
-      filtrosActivos = {}
-      //Realizamos la peticion para obtener todos los productos
-      let request = new XMLHttpRequest();
-      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/"
-      request.open("GET", urlPeticion);
-      request.send();
-      request.responseType = "json";
-      request.onload = function () {
-        //Se guardan los productos ordenados
-        productos = ordenaProductos(request.response["productos"]);
-        //Cargamos los productos de la primera pagina
-        cargarProductos(sacaProductosPaginacion(productos, 1));
-        //Reiniciamos la paginacion
-        reiniciaPaginacion(productos.length);
-      }
-
-    })
-    //Fin quita filtro
+    //-----------------------FILTROS DE PRODUCTOS-----------------------
 
     //Filtrado de los productos por genero
     $('.filtroGen').click(function () {
@@ -94,27 +64,15 @@ $(document).ready(
         filtrado += "?genero=" + generoSeleccionado;
       }
 
-
       //Miramos si hay una categoria seleccionada, en cuyo caso se aplica tambien
       if (filtrosActivos["categoria"] != undefined) {
-        filtrado += (filtrado == "") ? "?" : "&" + "categoria=" + filtrosActivos["categoria"];
+        filtrado += ((filtrado == "") ? "?" : "&") + "categoria=" + filtrosActivos["categoria"];
       }
-      //Hacemos la peticion
-      let request = new XMLHttpRequest();
-      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado;
-      request.open("GET", urlPeticion);
-      request.send();
-      request.responseType = "json";
-      request.onload = function () {
-        //Se guardan los productos ordenados
-        productos = ordenaProductos(request.response["productos"]);
-        //Cargamos los productos de la primera pagina
-        cargarProductos(sacaProductosPaginacion(productos, 1));
-        //Reiniciamos la paginacion
-        reiniciaPaginacion(productos.length);
-      }
-    })
-    //Fin filtro
+
+      //Hacemos la peticion de los productos con los filtros
+      peticionProductos(filtrado)
+
+    });
 
     //Filtrado de los productos por categoria
     $('.filtroCat').click(function () {
@@ -144,27 +102,14 @@ $(document).ready(
 
       //Miramos is tambien hay un filtro de genero, en cuyo caso se aplica tambien
       if (filtrosActivos["genero"] != undefined) {
-        filtrado += (filtrado == "") ? "?" : "&" + "genero=" + filtrosActivos["genero"];
+        filtrado += ((filtrado == "") ? "?" : "&") + "genero=" + filtrosActivos["genero"];
       }
-
-      //Hacemos la peticion
-      let request = new XMLHttpRequest();
-      let urlPeticion = "http://127.0.0.1:8000/tienda/productos/" + filtrado
-      request.open("GET", urlPeticion);
-      request.send();
-      request.responseType = "json";
-      request.onload = function () {
-        //Se guardan los productos ordenados
-        productos = ordenaProductos(request.response["productos"])
-        //Cargamos los productos de la primera pagina
-        cargarProductos(sacaProductosPaginacion(productos, 1))
-        //Reiniciamos la paginacion
-        reiniciaPaginacion(productos.length);
-
-      }
+      //Hacemos la peticion de los productos con los filtros
+      peticionProductos(filtrado);
     });
-    //Fin filtro
+    //----------------------- FIN FILTROS DE PRODUCTOS-----------------------
 
+    //-----------------------PAGINACION PRODUCTOS-----------------------
     //Buscamos los dos botones para paginar los productos
     let pag2 = document.getElementById("pag2");
     let pag1 = document.getElementById("pag1");
@@ -192,6 +137,7 @@ $(document).ready(
       //Cargamos los productos de la pagina actual
       cargarProductos(sacaProductosPaginacion(productos, num));
     });
+
     //Asinamos al boton pag1
     $('#pag1').click(function () {
       //Solo actuara cuando el elemento marcado sea el pag2
@@ -207,6 +153,7 @@ $(document).ready(
         cargarProductos(sacaProductosPaginacion(productos, num));
       }
     });
+
     //Asinamos al boton de siguiente a la pagina anterior sus funciones
     $('#pagSig').click(function () {
       //Pasara a la pagina siguiente
@@ -219,6 +166,7 @@ $(document).ready(
       //Cargamos los productos de la pagina indicada
       cargarProductos(sacaProductosPaginacion(productos, num));
     });
+
     //Asinamos al boton pag2
     $('#pag2').click(function () {
       //Pasamos a la pagina siguiente
@@ -231,7 +179,7 @@ $(document).ready(
       //Cargamos los productos de la pagina indicada
       cargarProductos(sacaProductosPaginacion(productos, num));
     });
-
+    //-----------------------FIN PAGINACION PRODUCTOS-----------------------
 
   });
 //Fin $(document).ready
@@ -260,11 +208,50 @@ function ordenaProductos(productos) {
 }
 //Fin ordenaProductos
 
-//Función encargada de cargar todos los productos pasados
-function cargarProductos(productosElegidos) {
+function peticionProductos(filtrado) {
   //Borramos todos los productos anteriores
   $('.producto').remove();
+  //Mostramos el loader
+  $('.loader').show();
+  //Ponemos la url correcta dependiendo de los filtros
+  let url = 'http://127.0.0.1:8000/tienda/productos/';
+  if (filtrado != undefined) {
+    url = 'http://127.0.0.1:8000/tienda/productos/' + filtrado;
+  }
+  //Realizamos la peticion mediante ajax
+  $.ajax({
+    //Url donde hacemos la peticion
+    url: url,
+    //Metodo de la peticion
+    type: 'GET',
+    //Que haremos si la peticion es correcta
+    success: function (response) {
+      //Se guardan los productos ordenados
+      productos = ordenaProductos(response["productos"])
+      //Cargamos los productos de la primera pagina
+      cargarProductos(sacaProductosPaginacion(productos, 1))
+      //Reiniciamos la paginacion
+      reiniciaPaginacion(productos.length);
+      //Ocultamos el loader
+      $('.loader').hide();
+    },
+    //Que haremos en caso de error
+    error: function () {
+      console.error("No es posible completar la operación");
+      //Ocultamos el loader
+      $('.loader').hide();
+    }
+  });
+}
+
+
+
+//Función encargada de cargar todos los productos pasados
+function cargarProductos(productosElegidos) {
+
+  //Miramos si hemos obtenido productos
   if (productosElegidos.length == 0) {
+    //Mostramos un mensaje indicando que no se disponen de articulos
     const div = document.createElement("div");
     div.classList.add("producto");
     let htmlProducto = `<h2 class="text-center">Lo sentimos, no disponemos de ese tipo de artículos</h2>
@@ -272,7 +259,7 @@ function cargarProductos(productosElegidos) {
     div.innerHTML = htmlProducto;
     document.getElementById("contenedorProductos").append(div);
   } else {
-    //Mostramos los productos pasados
+    //Mostramos los productos
     productosElegidos.forEach(producto => {
 
       const div = document.createElement("div");

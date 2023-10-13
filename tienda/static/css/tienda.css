@@ -69,5 +69,11 @@
     color: #f71515 !important;
 }
 
+.loader{
+    width: 7rem; 
+    height: 7rem;
+    color: #69bb7e;
+}
+
 
 
