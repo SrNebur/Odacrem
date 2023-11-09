@@ -1,0 +1,140 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/tienda.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/slick-theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/slick.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Producto actual -->
+    <section class="bg-light">
+        <div class="container pb-5">
+            <div class="row">
+                <!-- Imagen del producto -->
+                <div class="col-lg-5 mt-5">
+                    <div class="card mb-3">
+                        {% if producto.imagen %}
+                            <img class="card-img img-fluid" src="{{ producto.imagen.url }}" alt="Imagen producto {{ producto.nombre }}" id="product-detail">
+                        {% else %}
+                            <img class="card-img img-fluid" src="{% static '/img/work_in_progress.png' %}" alt="Imagen producto {{ producto.nombre }}" id="product-detail">
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                <!-- Caracteristicas del producto -->
+                <div class="col-lg-7 mt-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="h2">{{producto.nombre}}</h1>
+                            <p class="h3 py-2">{{producto.precio}} €</p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <h6>Marca:</h6>
+                                </li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted"><strong>Adidas</strong></p>
+                                </li>
+                            </ul>
+
+                            <h6>Descripción:</h6>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse. Donec condimentum elementum convallis. Nunc sed orci a diam ultrices aliquet interdum quis nulla.</p>
+
+                            <form action="" method="GET">
+                                <input type="hidden" name="product-title" value="Activewear">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <ul class="list-inline pb-3">
+                                            <li class="list-inline-item">Talla :</li>
+                                            <li class="list-inline-item"><span class="btn btn-success btn-size">S</span></li>
+                                            <li class="list-inline-item"><span class="btn btn-success btn-size">M</span></li>
+                                            <li class="list-inline-item"><span class="btn btn-success btn-size">L</span></li>
+                                            <li class="list-inline-item"><span class="btn btn-success btn-size">XL</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-auto">
+                                        <ul class="list-inline pb-3">
+                                            <li class="list-inline-item text-right">
+                                                Quantity
+                                                <input type="hidden" name="product-quanity" id="product-quanity" value="1">
+                                            </li>
+                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
+                                            <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
+                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row pb-3">
+                                    <div class="col d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                                    </div>
+                                    <div class="col d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Add To Cart</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Close Content -->
+
+    <!-- Start Article -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-left p-2 pb-3">
+                <h4>Productos relacionados</h4>
+            </div>
+
+            <!-- Carrusel con libreria slick de productos relacionados -->
+            <div id="carousel-producto-relacionado">
+                {% for prod in productosRelacionados %}
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0">
+                            {% if prod.imagen %}
+                                <img class="card-img rounded-0 img-fluid" src="{{ prod.imagen.url }}">
+                            {% else %}
+                                <img class="card-img rounded-0 img-fluid" src="{% static '/img/work_in_progress.png' %}">
+                            {% endif %}
+                            
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li><a class="btn btn-success text-white mt-2" href="{% url 'Producto' prod.id %}"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href=""><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="{% url 'Producto' prod.id %}" class="h3 text-decoration-none">{{prod.nombre}}</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>{{prod.talla}}</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+                            <p class="text-center mb-0">{{prod.precio}}€</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+    </section>
+{% endblock %}
+
+{% block script%}
+<script src="{% static '/js/producto.js' %}"></script>
+<script src="{% static '/js/slick.min.js' %}"></script>
+{% endblock %}

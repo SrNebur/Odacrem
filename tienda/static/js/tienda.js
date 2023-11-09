@@ -8,6 +8,9 @@ const Orden = {
   PrecioBarato: 'precioBajo',
 }
 
+//Constante que guardara la direccion raiz del servidor para hacer las peticiones
+const urlServidor = "http://127.0.0.1:8000";
+
 //Constante que tiene el numero de productos por pagina
 const nProductosPagina = 9;
 
@@ -214,9 +217,9 @@ function peticionProductos(filtrado) {
   //Mostramos el loader
   $('.loader').show();
   //Ponemos la url correcta dependiendo de los filtros
-  let url = 'http://127.0.0.1:8000/tienda/productos/';
+  let url = urlServidor + '/tienda/productos';
   if (filtrado != undefined) {
-    url = 'http://127.0.0.1:8000/tienda/productos/' + filtrado;
+    url = urlServidor + '/tienda/productos' + filtrado;
   }
   //Realizamos la peticion mediante ajax
   $.ajax({
@@ -237,9 +240,18 @@ function peticionProductos(filtrado) {
     },
     //Que haremos en caso de error
     error: function () {
-      console.error("No es posible completar la operación");
+      console.error("No ha sido posible realizar la petición");
       //Ocultamos el loader
       $('.loader').hide();
+      //Añadimos un mensaje de error indicando al usuario lo que ha ocurrido
+      const div = document.createElement("div");
+      div.classList.add("producto");
+      let htmlProducto = `<h2 class="text-center">Lo sentimos, parece que ha habido un error al obtener los productos</h2>
+    <p class="text-center">Estamos trabajando para ofrecer un mejor servicio. Le pedimos disculpas por cualquier inconveniente.</p>`
+      div.innerHTML = htmlProducto;
+      document.getElementById("contenedorProductos").append(div);
+      //Reiniciamos la paginación a 0 para que desaparezca
+      reiniciaPaginacion(0);
     }
   });
 }
@@ -269,12 +281,12 @@ function cargarProductos(productosElegidos) {
       <div class="card mb-4 product-wap rounded-0">
         <!-- Tarjeta del producto -->
         <div class="card rounded-0">`
-      htmlProducto += producto.imagen == "" ? `<img class="card-img rounded-0 img-fluid" src="../static/img/work_in_progress.png"></img>` : `<img class="card-img rounded-0 img-fluid" src="../../media/${producto.imagen}"></img>`
+      htmlProducto +='<img class="card-img rounded-0 img-fluid" src="'+ ((producto.imagen == "") ? '../static/img/work_in_progress.png': '../../media/'+producto.imagen) + '"></img>'
       htmlProducto += `
         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
             <ul class="list-unstyled">
               <!-- Botones para ver el producto o añadirlo al carrito directamente -->
-              <li><a class="btn btn-success text-white mt-2" href="#"><i class="far fa-eye"></i></a></li>
+              <li><a class="btn btn-success text-white mt-2" href="`+ urlServidor +`/tienda/producto/${producto.id}"><i class="far fa-eye"></i></a></li>
               <li><a class="btn btn-success text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
             </ul>
           </div>
@@ -329,6 +341,8 @@ function reiniciaPaginacion(tamanyoProd) {
 
 //Funcion encargada de pasar a la pagina siguiente, en todo lo referente a estetica
 function pagSig(productos) {
+  //Borramos todos los productos anteriores
+  $('.producto').remove();
   let pag2 = document.getElementById("pag2");
   $('#pagAnt').prop("disabled", false);
   if (pag2.innerHTML == Math.ceil(productos.length / nProductosPagina)) {
@@ -343,6 +357,8 @@ function pagSig(productos) {
 
 //Funcion encargada de pasar a la pagina anterior, en todo lo referente a estetica
 function pagAnt(productos) {
+  //Borramos todos los productos anteriores
+  $('.producto').remove();
   let pag2 = document.getElementById("pag2");
   $('#pagSig').prop("disabled", false);
   if (pag2.innerHTML == Math.ceil(productos.length / nProductosPagina) && pag2.classList.contains("btn-success")) {

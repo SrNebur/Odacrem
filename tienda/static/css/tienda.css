@@ -75,5 +75,9 @@
     color: #69bb7e;
 }
 
+.slick-prev:before, .slick-next:before{
+    color:black !important;
+}
+
 
 
