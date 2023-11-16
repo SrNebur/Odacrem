@@ -29,34 +29,37 @@
                         <div class="card-body">
                             <h1 class="h2">{{producto.nombre}}</h1>
                             <p class="h3 py-2">{{producto.precio}} €</p>
+                            {% if producto.marca %}
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <h6>Marca:</h6>
                                 </li>
                                 <li class="list-inline-item">
-                                    <p class="text-muted"><strong>Adidas</strong></p>
+                                    <p class="text-muted"><strong>{{producto.marca}}</strong></p>
                                 </li>
                             </ul>
+                            {% endif %}
 
                             <h6>Descripción:</h6>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse. Donec condimentum elementum convallis. Nunc sed orci a diam ultrices aliquet interdum quis nulla.</p>
+                            <p>{{producto.descripcion}}</p>
 
                             <form action="" method="GET">
                                 <input type="hidden" name="product-title" value="Activewear">
                                 <div class="row">
+                                    {% if tallas %}
                                     <div class="col-auto">
                                         <ul class="list-inline pb-3">
-                                            <li class="list-inline-item">Talla :</li>
-                                            <li class="list-inline-item"><span class="btn btn-success btn-size">S</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success btn-size">M</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success btn-size">L</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success btn-size">XL</span></li>
+                                            <li class="list-inline-item"><h6>Talla:</h6>
+                                            {% for talla in tallas.talla %}
+                                            <li class="list-inline-item mt-1"><span class="btn btn-success btn-size">{{talla}}</span></li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
+                                    {% endif %}
                                     <div class="col-auto">
                                         <ul class="list-inline pb-3">
                                             <li class="list-inline-item text-right">
-                                                Quantity
+                                                <h6>Cantidad:</h6>
                                                 <input type="hidden" name="product-quanity" id="product-quanity" value="1">
                                             </li>
                                             <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
@@ -67,10 +70,10 @@
                                 </div>
                                 <div class="row pb-3">
                                     <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Comprar</button>
                                     </div>
                                     <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Add To Cart</button>
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Añadir al carrito</button>
                                     </div>
                                 </div>
                             </form>
@@ -112,7 +115,6 @@
                         <div class="card-body">
                             <a href="{% url 'Producto' prod.id %}" class="h3 text-decoration-none">{{prod.nombre}}</a>
                             <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                <li>{{prod.talla}}</li>
                                 <li class="pt-2">
                                     <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
                                     <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>

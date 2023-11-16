@@ -294,7 +294,6 @@ function cargarProductos(productosElegidos) {
         <div class="card-body">
           <a href="#" class="h3 text-decoration-none">${producto.nombre}</a>
           <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-            <li>${producto.talla}</li>
             <li class="pt-2">
               <!--Imprimimos el precio del producto con 2 decimales -->
               <p class="text-center mb-0">${producto.precio.toFixed(2)}€</p>

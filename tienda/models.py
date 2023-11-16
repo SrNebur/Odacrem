@@ -5,8 +5,6 @@ from multiselectfield import MultiSelectField
 # Create your models here.
 #Mapeo ORM de las clases categoria y producto
 
-    
-
 class Seccion(models.Model):
     nombre = models.CharField(max_length = 50)
 
@@ -27,8 +25,19 @@ class Categoria(models.Model):
     
     def __str__(self):
         return self.nombre
+    
+#Clase que sirve para añadir marcas a productos
+class Marca(models.Model):
+    nombre = models.CharField(max_length = 50)
 
-#Clase abstracta que servira como base para crear productos de diversos tipos
+    class Meta:
+        verbose_name = "marca"
+        verbose_name_plural = "marcas"
+    
+    def __str__(self):
+        return self.nombre
+
+#Clase que servira como base para crear productos de diversos tipos
 class Producto(models.Model):
     #El primer valor es el almacenado en la base de datos, el segundo será el mostrado
     SEXO = [
@@ -44,6 +53,8 @@ class Producto(models.Model):
     disponibilidad = models.BooleanField( default = True)
     #Almacenamos en la base de datos solo estas opciones
     genero = models.CharField(max_length = 1, choices = SEXO, default = "X")
+    descripcion = models.TextField(max_length=1500)
+    marca = models.ForeignKey(Marca,on_delete = models.PROTECT, null = True, blank = True)
 
 
     class Meta:
@@ -61,7 +72,7 @@ class Prod_Ropa(Producto):
         ("L", "L"),
         ("XL", "XL"),
         ]
-        talla = MultiSelectField(max_choices = 4,max_length = 8, choices = TALLAS, blank = False, null = False)
+        talla = MultiSelectField(min_choices = 1, max_choices = 4,max_length = 8, choices = TALLAS, blank = False, null = False)
         class Meta:
             verbose_name = "ropa"
             verbose_name_plural = "ropas"
@@ -70,7 +81,7 @@ class Prod_Calzado(Producto):
     TALLAS = [
         ("36","36"),("37","37"),("38","38"),("39","39"),("40","40"),("41","41"),("42","42"),("43","43"),("44","44"),("45","45"),("46","46"),("47","47"),("48","48"),("49","49"),("50","50"),("51","51"),("52","52"),("53","53"),("54","54")
     ]
-    talla = MultiSelectField(max_choices = 19,max_length = 56, choices = TALLAS, blank = False, null = False)
+    talla = MultiSelectField(max_choices = 19,min_choices = 1,max_length = 56, choices = TALLAS, blank = False, null = False)
     class Meta:
         verbose_name = "calzado"
         verbose_name_plural = "calzados"
