@@ -47,7 +47,8 @@ class Producto(models.Model):
 
 
     class Meta:
-        abstract = True
+        verbose_name = "producto"
+        verbose_name_plural = "productos"
     
     def __str__(self):
         return self.nombre
@@ -61,22 +62,20 @@ class Prod_Ropa(Producto):
         ("XL", "XL"),
         ]
         talla = MultiSelectField(max_choices = 4,max_length = 8, choices = TALLAS, blank = False, null = False)
-        
         class Meta:
             verbose_name = "ropa"
-            verbose_name_plural = "ropa"
+            verbose_name_plural = "ropas"
 
 class Prod_Calzado(Producto):
     TALLAS = [
         ("36","36"),("37","37"),("38","38"),("39","39"),("40","40"),("41","41"),("42","42"),("43","43"),("44","44"),("45","45"),("46","46"),("47","47"),("48","48"),("49","49"),("50","50"),("51","51"),("52","52"),("53","53"),("54","54")
     ]
     talla = MultiSelectField(max_choices = 19,max_length = 56, choices = TALLAS, blank = False, null = False)
-    
     class Meta:
-            verbose_name = "calzado"
-            verbose_name_plural = "calzado"
+        verbose_name = "calzado"
+        verbose_name_plural = "calzados"
 
-class Prod_Accesorio(Producto):
+class Prod_Accesorio(Producto):    
     class Meta:
-            verbose_name = "accesorio"
-            verbose_name_plural = "accesorios"
+        verbose_name = "accesorio"
+        verbose_name_plural = "accesorios"
