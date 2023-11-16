@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Producto,Categoria,Seccion
+from .models import Categoria,Seccion,Prod_Ropa,Prod_Calzado,Prod_Accesorio
+from django.forms.models import model_to_dict
 
 from django.views import View
 from django.http.response import JsonResponse
@@ -24,9 +25,14 @@ class ProductoView(View):
             else:
                 productos = {}
         else:
-            productos = Producto.objects.values().order_by("nombre")
+            #Recuperamos los productos de cada tipo y los añadimos a la lista
+            productos = list(Prod_Ropa.objects.filter(disponibilidad = True).values())
+            productos.extend(list(Prod_Calzado.objects.filter(disponibilidad=True).values()))
+            productos.extend(list(Prod_Accesorio.objects.filter(disponibilidad = True).values()))
+
+
         if len(productos) > 0:
-            datos = {"message":"Success",'productos':list(productos)}
+            datos = {"message":"Success",'productos':productos}
         else:
             datos = {"message":"No se han encontrado productos disponibles",'productos':[]}
         return JsonResponse(datos,safe = False)

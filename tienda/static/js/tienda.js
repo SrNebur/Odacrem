@@ -212,8 +212,6 @@ function ordenaProductos(productos) {
 //Fin ordenaProductos
 
 function peticionProductos(filtrado) {
-  //Borramos todos los productos anteriores
-  $('.producto').remove();
   //Mostramos el loader
   $('.loader').show();
   //Ponemos la url correcta dependiendo de los filtros
@@ -260,7 +258,8 @@ function peticionProductos(filtrado) {
 
 //Función encargada de cargar todos los productos pasados
 function cargarProductos(productosElegidos) {
-
+  //Borramos todos los productos anteriores
+  $('.producto').remove();
   //Miramos si hemos obtenido productos
   if (productosElegidos.length == 0) {
     //Mostramos un mensaje indicando que no se disponen de articulos
