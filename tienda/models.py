@@ -46,7 +46,7 @@ class Producto(models.Model):
         ("X","Unisex"),
     ]
 
-    nombre = models.CharField(max_length = 50)
+    nombre = models.CharField(max_length = 40)
     categoria = models.ForeignKey(Categoria,on_delete = models.PROTECT)
     imagen = models.ImageField(upload_to = "tienda", null = True, blank = True)
     precio = models.FloatField()

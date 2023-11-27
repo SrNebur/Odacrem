@@ -9,134 +9,143 @@
 
 {% block content %}
 <!-- Producto actual -->
-    <section class="bg-light">
-        <div class="container pb-5">
-            <div class="row">
-                <!-- Imagen del producto -->
-                <div class="col-lg-5 mt-5">
-                    <div class="card mb-3">
-                        {% if producto.imagen %}
-                            <img class="card-img img-fluid" src="{{ producto.imagen.url }}" alt="Imagen producto {{ producto.nombre }}" id="product-detail">
-                        {% else %}
-                            <img class="card-img img-fluid" src="{% static '/img/work_in_progress.png' %}" alt="Imagen producto {{ producto.nombre }}" id="product-detail">
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <!-- Imagen del producto -->
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    {% if producto.imagen %}
+                    <img class="card-img img-fluid" src="{{ producto.imagen.url }}"
+                        alt="Imagen producto {{ producto.nombre }}" id="product-detail">
+                    {% else %}
+                    <img class="card-img img-fluid" src="{% static '/img/work_in_progress.png' %}"
+                        alt="Imagen producto {{ producto.nombre }}" id="product-detail">
+                    {% endif %}
+
+                </div>
+            </div>
+            <!-- Caracteristicas del producto -->
+            <div class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2">{{producto.nombre}}</h1>
+                        <p class="h3 py-2">{{producto.precio}} €</p>
+                        {% if producto.marca %}
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Marca:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>{{producto.marca}}</strong></p>
+                            </li>
+                        </ul>
                         {% endif %}
-                        
-                    </div>
-                </div>
-                <!-- Caracteristicas del producto -->
-                <div class="col-lg-7 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="h2">{{producto.nombre}}</h1>
-                            <p class="h3 py-2">{{producto.precio}} €</p>
-                            {% if producto.marca %}
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h6>Marca:</h6>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="text-muted"><strong>{{producto.marca}}</strong></p>
-                                </li>
-                            </ul>
+
+                        <h6>Descripción:</h6>
+                        <p>{{producto.descripcion}}</p>
+
+
+                        <div class="row">
+                            {% if tallas %}
+                            <div class="col-auto">
+                                <ul class="list-inline pb-3">
+                                    <li class="list-inline-item">
+                                        <h6>Tallas:</h6>
+                                        
+                                        <li class="list-inline-item mt-1"><span class="btn btn-secondary btn-size">{{tallaDefecto}}</span></li>
+                                        {% for talla in tallas.talla %}
+                                        <li class="list-inline-item mt-1"><span class="btn btn-success btn-size">{{talla}}</span></li>
+                                        {% endfor %}
+                                </ul>
+                            </div>
                             {% endif %}
-
-                            <h6>Descripción:</h6>
-                            <p>{{producto.descripcion}}</p>
-
-                            <form action="" method="GET">
-                                <input type="hidden" name="product-title" value="Activewear">
-                                <div class="row">
-                                    {% if tallas %}
-                                    <div class="col-auto">
-                                        <ul class="list-inline pb-3">
-                                            <li class="list-inline-item"><h6>Talla:</h6>
-                                            {% for talla in tallas.talla %}
-                                            <li class="list-inline-item mt-1"><span class="btn btn-success btn-size">{{talla}}</span></li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                    {% endif %}
-                                    <div class="col-auto">
-                                        <ul class="list-inline pb-3">
-                                            <li class="list-inline-item text-right">
-                                                <h6>Cantidad:</h6>
-                                                <input type="hidden" name="product-quanity" id="product-quanity" value="1">
-                                            </li>
-                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
-                                            <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="row pb-3">
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Comprar</button>
-                                    </div>
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Añadir al carrito</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Close Content -->
-
-    <!-- Start Article -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-left p-2 pb-3">
-                <h4>Productos relacionados</h4>
-            </div>
-
-            <!-- Carrusel con libreria slick de productos relacionados -->
-            <div id="carousel-producto-relacionado">
-                {% for prod in productosRelacionados %}
-                <div class="p-2 pb-3">
-                    <div class="product-wap card rounded-0">
-                        <div class="card rounded-0">
-                            {% if prod.imagen %}
-                                <img class="card-img rounded-0 img-fluid" src="{{ prod.imagen.url }}">
-                            {% else %}
-                                <img class="card-img rounded-0 img-fluid" src="{% static '/img/work_in_progress.png' %}">
-                            {% endif %}
-                            
-                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                <ul class="list-unstyled">
-                                    <li><a class="btn btn-success text-white mt-2" href="{% url 'Producto' prod.id %}"><i class="far fa-eye"></i></a></li>
-                                    <li><a class="btn btn-success text-white mt-2" href=""><i class="fas fa-cart-plus"></i></a></li>
+                            <div class="col-auto">
+                                <ul class="list-inline pb-3">
+                                    <li class="list-inline-item text-right">
+                                        <h6>Cantidad:</h6>
+                                    </li>
+                                    <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span>
+                                    </li>
+                                    <li class="list-inline-item"><span class="badge bg-secondary" id="cantidad">1</span></li>
+                                    <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <a href="{% url 'Producto' prod.id %}" class="h3 text-decoration-none">{{prod.nombre}}</a>
-                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                <li class="pt-2">
-                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
-                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
-                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
-                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
-                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
-                                </li>
-                            </ul>
-                            <p class="text-center mb-0">{{prod.precio}}€</p>
+                        <div class="row pb-3">
+                            <div class="col d-grid">
+                                <a id="comprar" class="btn btn-success btn-lg" value="{{producto.id}}" talla="{{tallaDefecto}}" href="{% url 'Pedido' %}"><strong>Comprar</strong></a>
+                            </div>
+                            <div class="col d-grid">
+                                <a id="anyadirCarrito" value="{{producto.id}}" talla="{{tallaDefecto}}" class="btn btn-success btn-lg"><strong>Añadir al carrito</strong></a>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
-                {% endfor %}
-
             </div>
+        </div>
+    </div>
+</section>
+<!-- Close producto acutal -->
 
+<!-- Productos relacionados -->
+<section class="py-5">
+    <div class="container">
+        {% if productosRelacionados %}
+        <div class="row text-left p-2 pb-3">
+            <h4>Productos relacionados</h4>
+        </div>
+
+        <!-- Carrusel con libreria slick de productos relacionados -->
+        <div id="carousel-producto-relacionado">
+            {% for prod in productosRelacionados %}
+            <div class="p-2 pb-3">
+                <div class="product-wap card rounded-0">
+                    <div class="card rounded-0">
+                        {% if prod.imagen %}
+                        <img class="card-img rounded-0 img-fluid" src="{{ prod.imagen.url }}">
+                        {% else %}
+                        <img class="card-img rounded-0 img-fluid" src="{% static '/img/work_in_progress.png' %}">
+                        {% endif %}
+
+                        <div
+                            class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-success text-white mt-2" href="{% url 'Producto' prod.id %}"><i
+                                            class="far fa-eye"></i></a></li>
+                                <li><a class="btn btn-success text-white mt-2" href=""><i
+                                            class="fas fa-cart-plus"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'Producto' prod.id %}" class="h3 text-decoration-none">{{prod.nombre}}</a>
+                        <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                            <li class="pt-2">
+                                <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                            </li>
+                        </ul>
+                        <p class="text-center mb-0">{{prod.precio}}€</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
         </div>
-    </section>
+        {% endif %}
+
+    </div>
+</section>
 {% endblock %}
 
 {% block script%}
-<script src="{% static '/js/producto.js' %}"></script>
-<script src="{% static '/js/slick.min.js' %}"></script>
+<script src="{% static '/js/producto.js' %}" type="module"></script>
+<script src="{% static '/js/slick.min.js' %}" type="module"></script>
 {% endblock %}

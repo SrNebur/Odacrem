@@ -10,6 +10,7 @@ def tienda(request):
     categorias = Categoria.objects.all()
     return render(request,"tienda.html",{"secciones":secciones, "categorias":categorias,})
 
+#Peticion para obtener todos los productos de la tienda con posibilidad de filtro de categoria y genero
 class ProductoView(View):
     def get(self,request):
         if len(request.GET) > 0:
@@ -26,13 +27,32 @@ class ProductoView(View):
         else:
             productos = Producto.objects.filter(disponibilidad = True).order_by("nombre").values()
 
+        #Agregamos las tallas a los productos que las tengan
+        for prod in productos:
+            try:
+                tallas = Prod_Ropa.objects.filter(producto_ptr_id = prod["id"]).values()
+            except Prod_Ropa.DoesNotExist:
+                tallas = []
 
+            if not tallas:
+                try:
+                 tallas = Prod_Calzado.objects.filter(producto_ptr_id = prod["id"]).values()
+                except Prod_Calzado.DoesNotExist:
+                    tallas = []
+            
+            if tallas:
+                prod["tallas"] = list(tallas[0]["talla"])
+            else:
+                prod["tallas"] = []
+            
+        #Mandamos la respuesta
         if len(productos) > 0:
             datos = {"message":"Success",'productos':list(productos)}
         else:
             datos = {"message":"No se han encontrado productos disponibles",'productos':[]}
         return JsonResponse(datos,safe = False)
-    
+
+#Peticion para ver un solo producto
 def producto(request,producto_id):
     producto = Producto.objects.get(pk=producto_id)
     productosRelacionados = Producto.objects.filter(categoria=producto.categoria).exclude(pk=producto_id)
@@ -46,6 +66,9 @@ def producto(request,producto_id):
             tallas = Prod_Calzado.objects.get(producto_ptr_id = producto_id)
         except Prod_Calzado.DoesNotExist:
             tallas = []
+    tallaDefecto=""
+    if tallas:
+        tallaDefecto = tallas.talla.pop(0)
         
-    print(productosRelacionados)
-    return render(request,"producto.html",{"producto":producto,"productosRelacionados":productosRelacionados,"tallas": tallas})
+
+    return render(request,"producto.html",{"producto":producto,"productosRelacionados":productosRelacionados,"tallas": tallas,"tallaDefecto": tallaDefecto})

@@ -1,3 +1,6 @@
+//Importamos el carrito
+import Carrito from './carrito.js';
+import { actualizaNumCarrito } from './base.js';
 
 'use strict';
 
@@ -10,6 +13,15 @@ const Orden = {
 
 //Constante que guardara la direccion raiz del servidor para hacer las peticiones
 const urlServidor = "http://127.0.0.1:8000";
+
+//variable global que guarda el carrito de la tienda
+var carrito
+if (sessionStorage.getItem("carrito")) {
+  carrito = new Carrito(sessionStorage.getItem("carrito"))
+} else {
+  carrito = new Carrito();
+}
+
 
 //Constante que tiene el numero de productos por pagina
 const nProductosPagina = 9;
@@ -125,6 +137,7 @@ $(document).ready(
       productos = ordenaProductos(productos);
       //Cargamos los productos que pertenecen a la pagina 1
       cargarProductos(sacaProductosPaginacion(productos, 1));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     //Fin orden productos
 
@@ -139,6 +152,7 @@ $(document).ready(
       }
       //Cargamos los productos de la pagina actual
       cargarProductos(sacaProductosPaginacion(productos, num));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     //Asinamos al boton pag1
@@ -154,6 +168,7 @@ $(document).ready(
         }
         //Cargamos los productos de la pagina indicada
         cargarProductos(sacaProductosPaginacion(productos, num));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
 
@@ -168,6 +183,7 @@ $(document).ready(
       }
       //Cargamos los productos de la pagina indicada
       cargarProductos(sacaProductosPaginacion(productos, num));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     //Asinamos al boton pag2
@@ -181,9 +197,9 @@ $(document).ready(
       }
       //Cargamos los productos de la pagina indicada
       cargarProductos(sacaProductosPaginacion(productos, num));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     //-----------------------FIN PAGINACION PRODUCTOS-----------------------
-
   });
 //Fin $(document).ready
 
@@ -272,6 +288,10 @@ function cargarProductos(productosElegidos) {
   } else {
     //Mostramos los productos
     productosElegidos.forEach(producto => {
+      let talla = '<li><a value=' + producto.id + ' class="btn btn-success text-white mt-2 anyadirCarrito"><i class="fas fa-cart-plus"></i></a></li>'
+      if (producto.tallas.length > 0) {
+        talla = '<li><a value=' + producto.id + ' tallas=' + producto.tallas + ' class="btn btn-success text-white mt-2 anyadirCarritoTalla" data-bs-toggle="modal" data-bs-target="#modalTalla"><i class="fas fa-cart-plus"></i></a></li>'
+      }
 
       const div = document.createElement("div");
       div.classList.add("producto");
@@ -280,19 +300,19 @@ function cargarProductos(productosElegidos) {
       <div class="card mb-4 product-wap rounded-0">
         <!-- Tarjeta del producto -->
         <div class="card rounded-0">`
-      htmlProducto +='<img class="card-img rounded-0 img-fluid" src="'+ ((producto.imagen == "") ? '../static/img/work_in_progress.png': '../../media/'+producto.imagen) + '"></img>'
+      htmlProducto += '<img class="card-img rounded-0 img-fluid" src="' + ((producto.imagen == "") ? '../static/img/work_in_progress.png' : '../../media/' + producto.imagen) + '"></img>'
       htmlProducto += `
         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
             <ul class="list-unstyled">
               <!-- Botones para ver el producto o añadirlo al carrito directamente -->
-              <li><a class="btn btn-success text-white mt-2" href="`+ urlServidor +`/tienda/producto/${producto.id}"><i class="far fa-eye"></i></a></li>
-              <li><a class="btn btn-success text-white mt-2" href="#"><i class="fas fa-cart-plus"></i></a></li>
+              <li><a class="btn btn-success text-white mt-2" href="${urlServidor}/tienda/producto/${producto.id}"><i class="far fa-eye"></i></a></li>
+              ${talla}
             </ul>
           </div>
         </div>
         <!-- Body de la tarjeta de presentación del producto -->
         <div class="card-body">
-          <a href="#" class="h3 text-decoration-none">${producto.nombre}</a>
+          <a href="${urlServidor}/tienda/producto/${producto.id}" class="h3 text-decoration-none">${producto.nombre}</a>
           <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
             <li class="pt-2">
               <!--Imprimimos el precio del producto con 2 decimales -->
@@ -307,8 +327,66 @@ function cargarProductos(productosElegidos) {
       document.getElementById("contenedorProductos").append(div);
     })
 
+    //-----------------------PETICION ANYADIR AL CARRITO--------------------
+    //Boton de añadir al carrito
+    $('.anyadirCarrito').click(function () {
+      let id = $(this).attr('value')
+
+      carrito.agregarCantidad(id, 1)
+
+      carrito.guardarCarrito();
+
+      actualizaNumCarrito(carrito);
+    });
+
+    $('#modal-anyadir').click(function () {
+      let id = $(this).attr('prod')
+      let talla = $(this).attr('talla')
+      //console.log(id + "-" + talla)
+      
+      carrito.agregarCantidad(id, 1, talla)
+
+      carrito.guardarCarrito();
+
+      actualizaNumCarrito(carrito);
+    });
+
+    $('.anyadirCarritoTalla').click(function () {
+      let id = $(this).attr('value')
+      $("#modal-anyadir").attr("prod",id)
+      let tallas = $(this).attr('tallas').split(',')
+      document.getElementById("modal-body").innerHTML = "";
+      const div = document.createElement("div");
+      div.classList.add("row");
+
+      $('#modal-anyadir').attr('talla',tallas[0])
+      let htmlTallas = '<li class="list-inline-item mt-1"><span class="btn btn-size btn-secondary">' + tallas[0] + '</span></li>';
+      tallas.shift();
+      tallas.forEach(t => {
+        htmlTallas += '<li class="list-inline-item mt-1"><span class="btn btn-success btn-size">' + t + '</span></li>'
+      });
+      let htmlTallaSelect = `
+      <div class="col-auto">
+          <ul class="list-inline pb-3">
+              <li class="list-inline-item">
+                  <h6>Tallas:</h6>
+                  ${htmlTallas}
+          </ul>
+      </div>`
+      div.innerHTML = htmlTallaSelect;
+      document.getElementById("modal-body").append(div);
+      //Boton de talla
+      $('.btn-size').click(function () {
+        $(".btn-size").removeClass('btn-secondary');
+        $(".btn-size").addClass('btn-success');
+        $(this).removeClass('btn-success');
+        $(this).addClass('btn-secondary');
+        $("#modal-anyadir").attr("talla",$(this).text())
+      });
+    });
+    //------------------FIN PETICION ANYADIR AL CARRITO-------------------
+
   }
-  //actualizarBotonesAgregar();
 }
 //Fin cargarProductos
 

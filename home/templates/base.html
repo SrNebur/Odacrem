@@ -76,9 +76,9 @@
                         <i class="fa fa-fw fa-search text-dark mr-2"></i>
                     </a>
                     <!-- Link a la ventana del carrito -->
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none" href="{% url 'Pedido' %}">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <!-- <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">Num articulos</span> -->
+                        <span id="numCarrito" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark visually-hidden">0</span>
                     </a>
                     <!-- Link a la ventana de usuario -->
                     <a class="nav-icon position-relative text-decoration-none" href="#">
@@ -213,6 +213,10 @@
     <!-- Scripts -->
     <script src="{% static '/js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Scripts encargados de tener el carrito de la tienda y actualizar el numero del mismo de la cabecera -->
+    <script src="{% static '/js/carrito.js' %}" type="module"></script>
+    <script src="{% static '/js/base.js' %}" type="module"></script>
     <!-- Bloque de contenido para scripts propios -->
     {% block script%}
 

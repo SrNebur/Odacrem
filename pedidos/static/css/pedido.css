@@ -1,0 +1,28 @@
+.loader {
+    width: 7rem;
+    height: 7rem;
+    color: #69bb7e;
+}
+
+.prodImagen {
+    max-width: 80%;
+    height: auto;
+}
+
+.error{
+    color: red;
+}
+
+/* Dispositivos extra grandes 1200px */
+@media (max-width: 990px) {
+    .nombreProducto{
+        font-size: medium;
+    }
+}
+
+/* Dispositivos extra grandes 1200px */
+@media (max-width: 430px) {
+    .nombreProducto{
+        font-size: small;
+    }
+}

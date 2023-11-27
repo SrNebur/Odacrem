@@ -71,19 +71,34 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                
+
             </div>
+
+            <!-- Modal para añadir productos a la tienda -->
+            <div class="modal fade" id="modalTalla" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">¿Que talla quieres?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div id="modal-body" class="modal-body">
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modal-anyadir" prod="" talla="" data-bs-dismiss="modal" type="button" class="btn btn-success text-white">Añadir al carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Paginación de los productos -->
             <div id="pagination" class="pagination pagination-lg justify-content-end">
-                <button id="pagAnt" type="button"
-                    class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg"> < </button>
-                <button id="pag1" type="button"
-                    class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg btn-success">1</button>
-                <button id="pag2" type="button"
-                    class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">2</button>
-                <button id="pagSig" type="button"
-                    class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">></button>
+                <button id="pagAnt" type="button" class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg"><</button>
+                <button id="pag1" type="button"class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg btn-success">1</button>
+                <button id="pag2" type="button"class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">2</button>
+                <button id="pagSig" type="button"class="btn rounded-0 mr-3 shadow-sm border-top-0 border-left-0 btn-lg">></button>
             </div>
         </div>
 
@@ -92,5 +107,5 @@
 {% endblock %}
 
 {% block script%}
-<script src="{% static '/js/tienda.js' %}"></script>
+<script src="{% static '/js/tienda.js' %}" type="module"></script>
 {% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/pedido.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <!-- Tarjeta de productos en el carrito -->
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">
+          <h5>Productos en la cesta</h5>
+        </div>
+        <div class="card-body">
+          <ul id="listaProductoCarrito" class="list-group">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border loader" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <!-- Aquí se mostrarán los productos del carrito cargados por js -->
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para asegurarse de eliminar un producto del carrito -->
+    <!-- Modal para añadir productos a la tienda -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalEliminarTitulo"></h5>
+          </div>
+          <div class="modal-footer">
+            <button id="modal-eliminar" value="" talla="" data-bs-dismiss="modal" type="button"class="btn btn-success text-white">Eliminar</button>
+            <button data-bs-dismiss="modal" type="button"class="btn btn-success text-white">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjeta de resumen de compra en el lateral -->
+    <div class="col-md-3">
+      <div class="card mb-3">
+        <div class="card-header">
+          <strong>Resumen de Compra</strong>
+        </div>
+        <div class="card-body">
+          <p><strong>Precio total: </strong><span id="precioTotal"></span>€</p>
+
+          <!-- Puedes cambiar el botón según tus necesidades -->
+          <div class="col d-grid">
+            <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Comprar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+
+</div>
+{% endblock %}
+
+{% block script%}
+<script src="{% static '/js/pedidos.js' %}" type="module"></script>
+<script src="{% static '/js/carrito.js' %}" type="module"></script>
+{% endblock %}
