@@ -1,0 +1,52 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% load crispy_forms_tags %}<!-- Carga de crispy forms para el formulario de logeo -->
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <!-- Tarjeta de productos en el carrito -->
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">
+          <h5>Login</h5>
+        </div>
+        <div class="card-body ">
+            <div class = "contenedorFormulario">
+                
+                <form method="post" class="textoFormulario" action>
+            
+                    {% csrf_token %}
+                        {{ form | crispy }}
+                    
+                    <div class = "contenedorFormulario text-center">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <span class = "alert alert-{{message.tags}}"> {{message}} </span>
+                                        
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url 'Registro' %}" class="d-flex justify-content-end link-secondary">¿Aún no te has registrado?</a>
+                    </div>
+                    <button type="submit" class="btn btn-success">Login</button> 
+                </form>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+</div>
+{% endblock %}
+
+{% block script%}
+{% endblock %}
