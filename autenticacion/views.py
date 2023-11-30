@@ -7,18 +7,19 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 #Importamos el metodo para mostrar todos los mensajes de error
 from django.contrib import messages
+from .forms import CustomUserCreationForm
 
 # Create your views here.
 # Clase encargada de la vista registro, gestionará get y post con cada uno de sus métodos
 class VRegistro(View):
 
     def get(self,request):
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
         return render(request,"registro.html",{"form":form})
 
     def post(self,request):
         #Obtenemos el formulario con los datos necesarios
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         #Comprobamos si el usuario es valido
         if form.is_valid():
             #Insertamos en la base de datos el usuario

@@ -22,7 +22,9 @@
                     {% csrf_token %}
             
                         {{ form | crispy }}
-                        
+                        <div>
+                          <a href="{% url 'Login' %}" class="d-flex justify-content-end link-secondary">¿Ya tienes una cuenta?</a>
+                        </div>
                         <button type="submit" class="btn btn-success ">Regístrate</button>
                 </form>
             </div>
