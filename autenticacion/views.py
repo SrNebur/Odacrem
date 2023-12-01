@@ -64,3 +64,7 @@ def logear(request):
 
     form = AuthenticationForm()
     return render(request,"login.html",{"form":form})
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect("Home")
