@@ -1,0 +1,150 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/tramitaPedido.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <form id="formPago" class="row">
+        <div class="col">
+            <div class="card">
+                    <div class="card-header">
+                        <h5>Dirección del envío</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group pb-1">
+                            <label for="nombreCalle">Nombre de la Calle</label>
+                            <input type="text" class="form-control" id="nombreCalle" placeholder="Ingrese el nombre de la calle" required>
+                            <b id="error_nombreCalle" class="error"></b>
+                        </div>
+
+                        <ul class="list-inline pb-1">
+                            <li class="list-inline-item text-right">
+                                <div class="form-group">
+                                    <label for="numeroPuerta">Número de Puerta</label>
+                                    <input type="text" class="form-control" id="numeroPuerta" placeholder="Nº puerta" required>
+                                    <b id="error_numPuerta" class="error"></b>
+                                </div>
+                            </li>
+                            <li class="list-inline-item">
+                                <div class="form-group">
+                                    <label for="codigoPostal">Código Postal</label>
+                                    <input type="text" class="form-control" id="codigoPostal" placeholder="Ingrese el código postal" required>
+                                    <b id="error_codigoPostal" class="error"></b>
+                                </div>
+                            </li>
+                            <li class="list-inline-item">
+                                <div class="form-group">
+                                    <label for="ciudad">Ciudad</label>
+                                    <input type="text" class="form-control" id="ciudad" placeholder="Ingrese la ciudad" required>
+                                    <b id="error_ciudad" class="error"></b>
+                                  </div>
+                            </li>
+                            <li class="list-inline-item">
+                                <div class="form-group">
+                                    <label for="provincia">Provincia</label>
+                                <select class="form-control" id="provincia" required>
+                                    <option value="" disabled selected>Seleccione la provincia</option>
+                                    <option value="VI">Álava</option>
+                                    <option value="AB">Albacete</option>
+                                    <option value="A">Alicante</option>
+                                    <option value="AL">Almería</option>
+                                    <option value="O">Asturias</option>
+                                    <option value="AV">Ávila</option>
+                                    <option value="BA">Badajoz</option>
+                                    <option value="B">Barcelona</option>
+                                    <option value="BU">Burgos</option>
+                                    <option value="CC">Cáceres</option>
+                                    <option value="CA">Cádiz</option>
+                                    <option value="S">Cantabria</option>
+                                    <option value="CS">Castellón</option>
+                                    <option value="CR">Ciudad Real</option>
+                                    <option value="CO">Córdoba</option>
+                                    <option value="CU">Cuenca</option>
+                                    <option value="GI">Gerona</option>
+                                    <option value="GR">Granada</option>
+                                    <option value="GU">Guadalajara</option>
+                                    <option value="SS">Guipúzcoa</option>
+                                    <option value="H">Huelva</option>
+                                    <option value="HU">Huesca</option>
+                                    <option value="PM">Islas Balears</option>
+                                    <option value="J">Jaén</option>
+                                    <option value="C">La Coruña</option>
+                                    <option value="LO">La Rioja</option>
+                                    <option value="GC">Las Palmas</option>
+                                    <option value="LE">León</option>
+                                    <option value="L">Lérida</option>
+                                    <option value="LU">Lugo</option>
+                                    <option value="M">Madrid</option>
+                                    <option value="MA">Málaga</option>
+                                    <option value="MU">Murcia</option>
+                                    <option value="NA">Navarra</option>
+                                    <option value="OR">Orense</option>
+                                    <option value="P">Palencia</option>
+                                    <option value="PO">Pontevedra</option>
+                                    <option value="SA">Salamanca</option>
+                                    <option value="TF">Santa Cruz de Tenerife</option>
+                                    <option value="SG">Segovia</option>
+                                    <option value="SE">Sevilla</option>
+                                    <option value="SO">Soria</option>
+                                    <option value="T">Tarragona</option>
+                                    <option value="TE">Teruel</option>
+                                    <option value="TO">Toledo</option>
+                                    <option value="V">Valencia</option>
+                                    <option value="VA">Valladolid</option>
+                                    <option value="BI">Vizcaya</option>
+                                    <option value="ZA">Zamora</option>
+                                    <option value="Z">Zaragoza</option>
+                                </select>
+                                <b id="error_provincia" class="error"></b>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h5>Tarjeta de credito</h5>
+                </div>
+                <div class="card-body ">
+                    <div class="form-row">
+                        <div class="form-group pb-1">
+                          <label for="tarjeta">Número de Tarjeta de Crédito</label>
+                          <input type="text" class="form-control" id="tarjeta" placeholder="Número de tarjeta" required>
+                          <b id="error_numTarjeta" class="error"></b>
+                        </div>
+                        <ul class="list-inline pb-1">
+                            <li class="list-inline-item text-right">
+                                <div class="form-group">
+                                    <label for="vencimiento">Fecha de Vencimiento</label>
+                                    <input type="text" class="form-control" id="vencimiento" placeholder="MM/AA" required>
+                                    <b id="error_fechaVal" class="error"></b>
+                                </div>
+                            </li>
+                            <li class="list-inline-item">
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="CVV" required>
+                                    <b id="error_cvv" class="error"></b>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class = "d-flex justify-content-end">
+                <button type="submit" id="pago" class="btn btn-lg btn-success d-flex justify-content-end">Realizar Pago</button>
+            </div>
+            
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block script%}
+<script src="{% static '/js/tramitaPedido.js' %}" type="module"></script>
+{% endblock %}

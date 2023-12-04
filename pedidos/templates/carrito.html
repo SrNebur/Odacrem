@@ -52,10 +52,8 @@
         </div>
         <div class="card-body">
           <p><strong>Precio total: </strong><span id="precioTotal"></span>€</p>
-
-          <!-- Puedes cambiar el botón según tus necesidades -->
           <div class="col d-grid">
-            <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Comprar</button>
+            <a type="submit" class="btn btn-success btn-lg" href="{% url 'TramitaPedido' %}">Comprar</a>
           </div>
         </div>
       </div>

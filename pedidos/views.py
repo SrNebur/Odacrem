@@ -7,7 +7,10 @@ from tienda.models import Producto
 # Create your views here.
 
 def pedido(request):
-    return render(request,"pedido.html")
+    return render(request,"carrito.html")
+
+def tramitaPedido(request):
+    return render(request,"tramitaPedido.html")
 
 
 class PedidoView(View):

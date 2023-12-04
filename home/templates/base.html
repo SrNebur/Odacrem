@@ -70,12 +70,8 @@
                         </div>
                     </div>
 
-                    <!-- Apertura del modal para la busqueda de artiulos -->
-                    <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#search">
-                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
-                    </a>
                     <!-- Link a la ventana del carrito -->
-                    <a class="nav-icon position-relative text-decoration-none" href="{% url 'Pedido' %}">
+                    <a class="nav-icon position-relative text-decoration-none" href="{% url 'Carrito' %}">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                         <span id="numCarrito" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark visually-hidden">0</span>
                     </a>
@@ -86,8 +82,12 @@
                             <i class="fa fa-regular fa-circle-user text-dark mr-5"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                          <li><a class="dropdown-item" href="#"><i class="fa fa-fw fa-inbox text-dark mr-3 text-decoration-none"></i> Mis pedidos</a></li>
-                          <li><a class="dropdown-item" href="{% url 'cerrar_sesion' %}"><i class="fa fa-fw fa-right-to-bracket text-dark mr-3 text-decoration-none"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-fw fa-inbox text-dark mr-3 text-decoration-none"></i> Mis pedidos</a></li>
+                            {% if request.user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fa fa-fw fa-table text-dark mr-3 text-decoration-none"></i> Administración</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'cerrar_sesion' %}"><i class="fa fa-fw fa-right-to-bracket text-dark mr-3 text-decoration-none"></i> Logout</a></li>
+                          
                         </ul>
                     {% else %}
                         <a class="nav-icon position-relative text-decoration-none" href="{% url 'Login' %}">
@@ -101,25 +101,6 @@
         </div>
     </nav>
     <!-- Fin Cabecera -->
-
-    <!-- Modal de busqueda -->
-    <div class="modal fade bg-white" id="search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" method="get" class="modal-content modal-body border-0 p-0">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Buscar ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Fin del modal de busqueda -->
 
     <!-- Bloque dinaminco de contenido de la pagina -->
     {% block content%}
