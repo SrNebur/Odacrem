@@ -4,15 +4,16 @@ import {actualizaNumCarrito} from './base.js';
 
 //variable global que guarda el carrito de la tienda
 var carrito
-if(sessionStorage.getItem("carrito")){
-  carrito = new Carrito(sessionStorage.getItem("carrito"))
-}else{
-  carrito = new Carrito();
-}
+
 
 'use strict';
 
 $(document).ready(function () {
+    if(sessionStorage.getItem("carrito")){
+      carrito = new Carrito(sessionStorage.getItem("carrito"))
+    }else{
+      carrito = new Carrito();
+    }
     //Carrusel caracteristicas
     $('#carousel-producto-relacionado').slick({
         infinite: true,

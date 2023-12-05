@@ -15,7 +15,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group pb-1">
-                            <label for="nombreCalle">Nombre de la Calle</label>
+                            <label for="nombreCalle">Nombre de la Calle *</label>
                             <input type="text" class="form-control" id="nombreCalle" placeholder="Ingrese el nombre de la calle" required>
                             <b id="error_nombreCalle" class="error"></b>
                         </div>
@@ -23,28 +23,28 @@
                         <ul class="list-inline pb-1">
                             <li class="list-inline-item text-right">
                                 <div class="form-group">
-                                    <label for="numeroPuerta">Número de Puerta</label>
-                                    <input type="text" class="form-control" id="numeroPuerta" placeholder="Nº puerta" required>
+                                    <label for="numeroPuerta">Número de Puerta </label>
+                                    <input type="text" class="form-control" id="numeroPuerta" placeholder="Nº puerta">
                                     <b id="error_numPuerta" class="error"></b>
                                 </div>
                             </li>
                             <li class="list-inline-item">
                                 <div class="form-group">
-                                    <label for="codigoPostal">Código Postal</label>
+                                    <label for="codigoPostal">Código Postal *</label>
                                     <input type="text" class="form-control" id="codigoPostal" placeholder="Ingrese el código postal" required>
                                     <b id="error_codigoPostal" class="error"></b>
                                 </div>
                             </li>
                             <li class="list-inline-item">
                                 <div class="form-group">
-                                    <label for="ciudad">Ciudad</label>
+                                    <label for="ciudad">Ciudad *</label>
                                     <input type="text" class="form-control" id="ciudad" placeholder="Ingrese la ciudad" required>
                                     <b id="error_ciudad" class="error"></b>
                                   </div>
                             </li>
                             <li class="list-inline-item">
                                 <div class="form-group">
-                                    <label for="provincia">Provincia</label>
+                                    <label for="provincia">Provincia *</label>
                                 <select class="form-control" id="provincia" required>
                                     <option value="" disabled selected>Seleccione la provincia</option>
                                     <option value="VI">Álava</option>
@@ -113,21 +113,21 @@
                 <div class="card-body ">
                     <div class="form-row">
                         <div class="form-group pb-1">
-                          <label for="tarjeta">Número de Tarjeta de Crédito</label>
-                          <input type="text" class="form-control" id="tarjeta" placeholder="Número de tarjeta" required>
+                          <label for="tarjeta">Número de Tarjeta de Crédito *</label>
+                          <input type="text" class="form-control" id="numTarjetaCredito" placeholder="Nº tarjeta: '1234567890123456' o '1234 1234 1234 1234'" required>
                           <b id="error_numTarjeta" class="error"></b>
                         </div>
                         <ul class="list-inline pb-1">
                             <li class="list-inline-item text-right">
                                 <div class="form-group">
-                                    <label for="vencimiento">Fecha de Vencimiento</label>
-                                    <input type="text" class="form-control" id="vencimiento" placeholder="MM/AA" required>
+                                    <label for="fechaVal">Fecha de Vencimiento *</label>
+                                    <input type="text" class="form-control" id="fechaVal" placeholder="MM/AA" required>
                                     <b id="error_fechaVal" class="error"></b>
                                 </div>
                             </li>
                             <li class="list-inline-item">
                                 <div class="form-group">
-                                    <label for="cvv">CVV</label>
+                                    <label for="cvv">CVV *</label>
                                     <input type="text" class="form-control" id="cvv" placeholder="CVV" required>
                                     <b id="error_cvv" class="error"></b>
                                 </div>

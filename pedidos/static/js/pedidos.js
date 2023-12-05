@@ -5,11 +5,7 @@ import { actualizaNumCarrito } from './base.js';
 
 //Variable global que guarda el carrito de la tienda
 var carrito
-if (sessionStorage.getItem("carrito")) {
-  carrito = new Carrito(sessionStorage.getItem("carrito"))
-} else {
-  carrito = new Carrito();
-}
+
 
 //Variable global que tiene el precio del carrito final
 var precioTotal = 0;
@@ -18,6 +14,17 @@ var precioTotal = 0;
 const urlServidor = "http://127.0.0.1:8000";
 
 $(document).ready(function () {
+  //Recuperamos el carrito
+  if (sessionStorage.getItem("carrito")) {
+    carrito = new Carrito(sessionStorage.getItem("carrito"))
+  } else {
+    carrito = new Carrito();
+  }
+
+  if(carrito.isEmpty()){
+    $("#comprar").hide();
+  }
+
   cargarProductos();
   //Boton del modal para eliminar el producto
 
@@ -34,6 +41,9 @@ $(document).ready(function () {
     cargarProductos();
     //Actualizamos el numero de elementos en el carrito
     actualizaNumCarrito(carrito);
+    if(carrito.isEmpty()){
+      $("#comprar").hide();
+    }
     //Movemos la pantalla al inicio
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

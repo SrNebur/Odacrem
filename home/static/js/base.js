@@ -5,13 +5,14 @@ import Carrito from './carrito.js';
 
 //Variable global que guarda el carrito de la tienda
 var carrito
-if (sessionStorage.getItem("carrito")) {
-  carrito = new Carrito(sessionStorage.getItem("carrito"))
-} else {
-  carrito = new Carrito();
-}
+
 
 $(document).ready(function () {
+    if (sessionStorage.getItem("carrito")) {
+      carrito = new Carrito(sessionStorage.getItem("carrito"))
+    } else {
+      carrito = new Carrito();
+    }
     actualizaNumCarrito(carrito);
 });
 
