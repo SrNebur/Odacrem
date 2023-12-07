@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.views.generic import View
 
 #Importación de los formularios para la creacion de usuarios y el logeo
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 #Importamos libreria para logear al usuario automaticamente, deslogearlo y autentificar la información de usuario
 from django.contrib.auth import login, logout, authenticate
 #Importamos el metodo para mostrar todos los mensajes de error

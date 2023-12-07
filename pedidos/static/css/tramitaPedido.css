@@ -1,3 +1,9 @@
 .error{
     color:red;
 }
+
+.loader{
+    width: 7rem; 
+    height: 7rem;
+    color: #69bb7e;
+}

@@ -237,7 +237,7 @@ function cargaProducto(id, cantidad, talla) {
         $("#modCantidad_" + id).removeClass("d-none");
       });
 
-      //Problemas para saber si val esta entre 1 y 20, solo enteros
+      
       $("#modCantidad_" + id).click(() => {
 
         var val = parseInt(document.getElementById("numeroCantidad10_" + id).value);

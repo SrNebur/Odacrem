@@ -3,7 +3,7 @@
 class Carrito {
 
     constructor(str) {
-        this.productos = []
+        this.productos = [];
         if (str) {
             str.split(",").forEach(element => {
                 let p = element.split("-")
@@ -88,6 +88,10 @@ class Carrito {
 
     guardarCarrito(){
         sessionStorage.setItem("carrito", this);
+    }
+
+    vaciarCarrito(){
+        this.productos = [];
     }
 
 }
