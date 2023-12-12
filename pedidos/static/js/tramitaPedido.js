@@ -159,9 +159,7 @@ function hacerPeticionPedido(nombreCalle,numPuerta,codigoPostal,provincia,ciudad
         //Actualizamos el numero de elementos en el carrito
         actualizaNumCarrito(carrito);
         //Redirigimos a la pagina del pedido, pasandole el pedido
-
-        //TODO: Hacer redirección cuando se haga la pagina de ver un pedido concreto
-
+        window.location.replace(urlServidor+"/pedido/pedido/"+response["pedido"]);
       },
       //Que haremos en caso de error
       error: function () {

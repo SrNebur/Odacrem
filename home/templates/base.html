@@ -58,17 +58,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="navbar align-self-center d-flex">
-
-                    <!-- Div que se mostrará en dispositivos pequeños para la busqueda -->
-                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Buscar ...">
-                            <div class="input-group-text">
-                                <i class="fa fa-fw fa-search"></i>
-                            </div>
-                        </div>
-                    </div>
+                <div class="navbar align-self-center d-flex justify-content-end">
 
                     <!-- Link a la ventana del carrito -->
                     <a class="nav-icon position-relative text-decoration-none" href="{% url 'Carrito' %}">
@@ -82,7 +72,7 @@
                             <i class="fa fa-regular fa-circle-user text-dark mr-5"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-fw fa-inbox text-dark mr-3 text-decoration-none"></i> Mis pedidos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'misPedidos' %}"><i class="fa fa-fw fa-inbox text-dark mr-3 text-decoration-none"></i> Mis pedidos</a></li>
                             {% if request.user.is_staff %}
                                 <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fa fa-fw fa-table text-dark mr-3 text-decoration-none"></i> Administración</a></li>
                             {% endif %}

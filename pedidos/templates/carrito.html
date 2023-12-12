@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static '/css/pedido.css' %}">
+<link rel="stylesheet" href="{% static '/css/carrito.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -37,8 +37,8 @@
             <h5 class="modal-title" id="modalEliminarTitulo"></h5>
           </div>
           <div class="modal-footer">
-            <button id="modal-eliminar" value="" talla="" data-bs-dismiss="modal" type="button"class="btn btn-success text-white">Eliminar</button>
-            <button data-bs-dismiss="modal" type="button"class="btn btn-success text-white">Cancelar</button>
+            <button id="modal-eliminar" value="" talla="" data-bs-dismiss="modal" type="button"class="btn btn-danger text-white">Eliminar</button>
+            <button data-bs-dismiss="modal" type="button"class="btn btn-secondary text-white">Cancelar</button>
           </div>
         </div>
       </div>
@@ -67,5 +67,5 @@
 
 {% block script%}
 <script src="{% static '/js/pedidos.js' %}" type="module"></script>
-<script src="{% static '/js/carrito.js' %}" type="module"></script>
+<script src="{% static '/js/carro.js' %}" type="module"></script>
 {% endblock %}

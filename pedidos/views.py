@@ -7,6 +7,7 @@ from .models import ProductoPedido,Pedido,Direcciones
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 import json
 # Create your views here.
 
@@ -16,6 +17,38 @@ def pedido(request):
 @login_required(login_url="/login/login")
 def tramitaPedido(request):
     return render(request,"tramitaPedido.html")
+
+@login_required(login_url="/login/login")
+def verPedido(request,pedido_id):
+    pedidos = Pedido.objects.filter(user_id = request.user)
+    pedido = Pedido.objects.get(id=pedido_id)
+    if pedidos.contains(pedido):
+        productosPedidos = ProductoPedido.objects.filter(pedido_id = pedido.id)
+        total = 0
+        for p in productosPedidos:
+            total += p.producto.precio * p.cantidad
+            
+        return render(request,"verPedido.html",{"pedido":pedido,"productos":productosPedidos,"precio":total})
+    else:
+        return redirect("Error")
+    
+@login_required(login_url="/login/login")
+def pedidos(request):
+    pedidos = list(Pedido.objects.filter(user_id = request.user).values())
+    return render(request,"pedidos.html",{"pedidos":pedidos})
+
+@login_required(login_url="/login/login")
+def cancelarPedido(request,pedido_id):
+    pedidos = Pedido.objects.filter(user_id = request.user)
+    pedido = Pedido.objects.get(id=pedido_id)
+    if pedidos.contains(pedido):
+        #print("Pedido a cancelar: "+str(pedido_id))
+        pedido.estado = "cancelado"
+        pedido.save()
+        return redirect("misPedidos")
+    else:
+        return redirect("Error")
+
 
 
 class PedidoView(View):

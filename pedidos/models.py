@@ -32,15 +32,7 @@ class Pedido(models.Model):
 
     #Indicamos que como toString nos devuelva el id
     def __str__(self):
-        return self.id # type: ignore
-
-    #Creamos una propiedad
-    @property
-    def total(self):
-        return self.lineapedido_set.aggregate( # type: ignore
-            total = Sum(F("precio") * F("cantidad"),output_field=FloatField())
-        )["total"]
-
+        return "Pedido nº " + str(self.id)
     class Meta:
         #Nombre de la tabla en la base de datos
         db_table = 'pedidos'
@@ -56,7 +48,7 @@ class ProductoPedido(models.Model):
     producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     pedido= models.ForeignKey(Pedido,on_delete=models.CASCADE)
     cantidad = models.IntegerField(default = 1)
-    talla = models.CharField(max_length = 2)
+    talla = models.CharField()
     created_at = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):

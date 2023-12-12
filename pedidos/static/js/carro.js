@@ -142,23 +142,18 @@ function cargaProducto(id, cantidad, talla) {
       let htmlCantidad = ''
       if(parseInt(cantidad) < 10){
         htmlCantidad = `
-        <div id="cantidadMenos10_${id}" class="btn-group">
-                            <button id="cantidad_${id}" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                              ${cantidad}
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><button class="dropdown-item cantidad">1</button></li>
-                              <li><button class="dropdown-item cantidad">2</button></li>
-                              <li><button class="dropdown-item cantidad">3</button></li>
-                              <li><button class="dropdown-item cantidad">4</button></li>
-                              <li><button class="dropdown-item cantidad">5</button></li>
-                              <li><button class="dropdown-item cantidad">6</button></li>
-                              <li><button class="dropdown-item cantidad">7</button></li>
-                              <li><button class="dropdown-item cantidad">8</button></li>
-                              <li><button class="dropdown-item cantidad">9</button></li>
-                              <li><button id="cantidad10_${id}" class="dropdown-item">+10</button></li>
-                            </ul>
-                          </div>`
+        <select class="form-select" id="cantidadMenos10_${id}" required>
+            <option value="1" ${cantidad==1? "selected":""}>1</option>
+            <option value="2" ${cantidad==2? "selected":""}>2</option>
+            <option value="3" ${cantidad==3? "selected":""}>3</option>
+            <option value="4" ${cantidad==4? "selected":""}>4</option>
+            <option value="5" ${cantidad==5? "selected":""}>5</option>
+            <option value="6" ${cantidad==6? "selected":""}>6</option>
+            <option value="7" ${cantidad==7? "selected":""}>7</option>
+            <option value="8" ${cantidad==8? "selected":""}>8</option>
+            <option value="9" ${cantidad==9? "selected":""}>9</option>
+            <option value="10">+10</option>
+        </select>`
       }
 
       let htmlProducto = `
@@ -212,24 +207,24 @@ function cargaProducto(id, cantidad, talla) {
       //Lo añadimos al contenedor de los productos
       document.getElementById("listaProductoCarrito").append(div);
 
-      $('.cantidad').click(function () {
-        //console.log("Cantidad modificada: "+$(this).text())
-        var val = $("#cantidad_" + id).text($(this).text());
-        precioTotal -= parseFloat($("#total_" + id).text())
-        let precio = parseFloat(val.text()) * parseFloat($("#precio_" + id).text())
-        $("#total_" + id).text(precio.toFixed(2))
-        precioTotal += precio;
-        actualizaPrecioTotal();
+      $('#cantidadMenos10_'+id).on("change",function () {
+        //console.log("Cantidad modificada: "+$('#cantidadMenos10_'+id).val())
+        if($('#cantidadMenos10_'+id).val()==10){
+          $("#cantidadMenos10_" + id).hide();
+          $("#cantidadMas10_" + id).removeClass("d-none");
+        }else{
+          let val = $('#cantidadMenos10_'+id).val();
+          precioTotal -= parseFloat($("#total_" + id).text())
+          let precio = parseFloat(val) * parseFloat($("#precio_" + id).text())
+          $("#total_" + id).text(precio.toFixed(2)+"€")
+          precioTotal += precio;
+          actualizaPrecioTotal();
 
-        carrito.anyadirProducto(id, parseInt(val.text()), talla);
-        carrito.guardarCarrito();
+          carrito.anyadirProducto(id, parseInt(val), talla);
+          carrito.guardarCarrito();
 
-        actualizaNumCarrito(carrito);
-      });
-
-      $('#cantidad10_' + id).click(function () {
-        $("#cantidadMenos10_" + id).hide();
-        $("#cantidadMas10_" + id).removeClass("d-none");
+          actualizaNumCarrito(carrito);
+        }
       });
 
       $("#numeroCantidad10_" + id).click(() => {
@@ -237,7 +232,6 @@ function cargaProducto(id, cantidad, talla) {
         $("#modCantidad_" + id).removeClass("d-none");
       });
 
-      
       $("#modCantidad_" + id).click(() => {
 
         var val = parseInt(document.getElementById("numeroCantidad10_" + id).value);
@@ -252,7 +246,7 @@ function cargaProducto(id, cantidad, talla) {
 
           precioTotal -= parseFloat($("#total_" + id).text())
           let precio = parseFloat(val) * parseFloat($("#precio_" + id).text())
-          $("#total_" + id).text(precio.toFixed(2))
+          $("#total_" + id).text(precio.toFixed(2)+"€")
           precioTotal += precio;
           actualizaPrecioTotal();
 

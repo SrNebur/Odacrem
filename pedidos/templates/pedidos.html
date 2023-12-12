@@ -1,0 +1,76 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <!-- Tarjeta de pedidos-->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h5>Mis Pedidos</h5>
+        </div>
+        <div class="card-body">
+          <ul id="listaPedidos" class="list-group">
+            {% for ped in pedidos %}
+            <li class="list-group-item">
+                <ul class="list-inline m-0">
+                    <div class="row">
+                        <div class="col-lg-7 d-flex justify-content-start">
+                            <ul class="list-inline">
+                                <li class="list-inline-item text-right ">
+                                    <h5>Número de identificacion: </h5>
+                                </li>
+                                <li class="list-inline-item text-right">
+                                    <span>{{ped.id}}</span>
+                                </li>
+                                <li class="list-inline-item text-right ">
+                                    <h6>Estado: </h6>
+                                </li>
+                                <li class="list-inline-item text-right">
+                                    <span>{{ped.estado|capfirst}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm d-flex justify-content-end acciones ml-3">
+                            <ul class="list-inline">
+                                <li class="list-inline-item text-right ">
+                                    <a type="button" href="{% url 'verPedido' ped.id %}" class="btn btn-outline-secondary">Ver pedido</a>
+                                </li>
+                                {% if ped.estado == "preparando" %}
+                                <li class="list-inline-item text-right">
+                                    <a id="elimina" data-bs-toggle="modal" data-bs-target="#modalCancelar_{{ped.id}}" class="btn btn-outline-danger">Cancelar Pedido</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </ul>
+                <!-- Modal para asegurarse de cancelar un pedido -->
+                <div class="modal fade" id="modalCancelar_{{ped.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalCancelarPedido">¿Está seguro de que desea cancelar el pedido: {{ped.id}}?</h5>
+                      </div>
+                      <div class="modal-footer">
+                        <a id="modal-cancelar" href="{% url 'cancelarPedido' ped.id %}" class="btn btn-danger text-white">Cancelar Pedido</a>
+                        <a data-bs-dismiss="modal" class="btn btn-secondary text-white">Volver</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script%}
+{% endblock %}

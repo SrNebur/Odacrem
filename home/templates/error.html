@@ -1,0 +1,27 @@
+{% extends "base.html"%}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/error.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="d-flex align-items-center justify-content-center ">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold">404</h1>
+            <p class="fs-3"> <span class="text-danger">Opps!</span> Pagina no encontrada.</p>
+            <p> La pagina que estas buscando no ha sido encontrado. </p>
+            <a href="{% url 'Home' %}" class="btn btn-success">Home</a>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+
+</div>
+{% endblock %}
+
+{% block script%}
+{% endblock %}
