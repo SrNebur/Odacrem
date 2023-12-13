@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "mathfilters",
+    "contacto",
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+#Envio de correos mediante gmail
+#IMPORTANTE : La cuenta que se use para enviar los correos deberá tener la opcion de envio de correos por terceros en gmail
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True #Podemos usar TLS y SSL
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "odacrem.daw@gmail.com" #Correo desde el cual se enviarán los emails
+EMAIL_HOST_PASSWORD = "eodbyswgzxrpjgsg"  #Pasword generado por google para la aplicación, Ajustes >> Contraseñas de aplicaciones
