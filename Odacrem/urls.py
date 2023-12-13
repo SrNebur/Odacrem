@@ -28,7 +28,7 @@ urlpatterns = [
     path('pedido/',include("pedidos.urls")),
     path('login/',include("autenticacion.urls")),
     path('contacto/',include("contacto.urls")),
-
+    path('about/',include("about.urls")),
 ]
 
 #Agregamos al patron de urls aquella que servirá para servir los documentos de imagenes, indicandole la ruta con las constantes de configuración.

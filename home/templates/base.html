@@ -51,7 +51,7 @@
                             <a class="nav-link" href="{% url 'Tienda' %}">Tienda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Sobre nosotros</a>
+                            <a class="nav-link" href="{% url 'About' %}">Sobre nosotros</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'Contacto' %}">Contacto</a>
@@ -108,24 +108,24 @@
                     <ul class="list-unstyled text-light footer-link-list">
                         <li>
                             <i class="fas fa-map-marker-alt fa-fw"></i>
-                            Donde estamos
+                            <a class="text-decoration-none" href="https://maps.app.goo.gl/7LnAmW34ZcdJvHmaA ">Carrer Illueca, 28, 03206 Elx, Alicante</a>
                         </li>
                         <li>
                             <i class="fa fa-phone fa-fw"></i>
-                            <a class="text-decoration-none" href="tel:numTelefono">Num telefono</a>
+                            <a class="text-decoration-none" href="tel:948 572 159 ">948 572 159 </a>
                         </li>
                         <li>
                             <i class="fa fa-envelope fa-fw"></i>
-                            <a class="text-decoration-none" href="mailto:correo@compañia.es">correoCompañia</a>
+                            <a class="text-decoration-none" href="mailto:odacrem.daw@gmail.com">odacrem.daw@gmail.com</a>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Aquí se mostrarian las categorias de los productos para acceder a ellas -->
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">¿Productos?</h2>
+                    <h2 class="h2 text-light pb-3 border-light"></h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Relojes</a></li>
+                        <li><a class="text-decoration-none" href="#"></a></li>
                     </ul>
                 </div>
 
@@ -134,7 +134,7 @@
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Más Información</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li><a class="text-decoration-none" href="{% url 'Home' %}">Home</a></li>
-                        <li><a class="text-decoration-none" href="#">Sobre nosotros</a></li>
+                        <li><a class="text-decoration-none" href="{% url 'About' %}">Sobre nosotros</a></li>
                         <li><a class="text-decoration-none" href="{% url 'Contacto' %}">Contacto</a></li>
                     </ul>
                 </div>
