@@ -7,6 +7,8 @@ from .models import ProductoPedido,Pedido,Direcciones
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.shortcuts import redirect
 import json
 # Create your views here.
@@ -100,12 +102,27 @@ class PedidoView(View):
         
         #Creacion del nuevo pedido con el usuario y la direccion
         ped = Pedido.objects.create(direccion = dir,user = request.user)
+        contenidoProductos ="Productos comprados\n---------------------------------\n"
         #Insercion de los productos del pedido creado
         for prod in productos:
             #Buscamos el producto
             p = Producto.objects.get(pk=prod['id'])
+            plural = "es" if prod["cantidad"]=="1" else ""
+            contenidoProductos+="{} x {} unidad{}.\n".format(p.nombre,prod["cantidad"],plural)
             #print("Pedido de producto: ",prod['id'],"cantidad: ",prod["cantidad"],"talla: ",prod["talla"])
             ProductoPedido.objects.create(producto = p,pedido = ped,cantidad = prod["cantidad"],talla = prod["talla"])
+        
+        if request.user.email:
+            nombre = request.user.username
+
+            correo = EmailMessage("Nuevo Pedido en Odacrem. Nº de identificacion: {}".format(ped.id),
+                  "Hola {}, se ha hecho un nuevo pedido con tu cuenta.\n{}\nMuchas gracias por comprar en Odacrem. Su pedido se enviará pronto ^^".format(nombre,contenidoProductos),
+                  "{}".format(settings.EMAIL_HOST_USER),[request.user.email],reply_to=[settings.EMAIL_HOST_USER])
+            #Contructor email("Asunto","Mensaje del correo"),"deQuienViene",["cuenta/s destino"],destinatario contestación)
+            try:
+                correo.send()
+            except:
+                print("Ha habido un problema con el envio de correo de pedido {}".format(ped.id))
 
         datos = {"message":"Success","pedido":ped.id}
         return JsonResponse(datos,safe = False)
