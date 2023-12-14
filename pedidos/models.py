@@ -18,6 +18,16 @@ class Direcciones(models.Model):
     ciudad = models.CharField(max_length = 40)
     provincia = models.CharField(choices = PROVINCIAS)
 
+    def __str__(self):
+        return self.nombre+","+str(self.numero) +","+str(self.codigoPostal)+" "+self.ciudad+","+self.provincia
+
+    class Meta:
+        #Nombre en singular y plural
+        verbose_name='direccion'
+        verbose_name_plural = 'direcciones'
+        #Campo por el cual se va a ordenar
+        ordering=['id']
+
 class Pedido(models.Model):
     ESTADOS = (("preparando","EN PREPARACION"),
                ("reparto","EN REPARTO"),
@@ -34,8 +44,6 @@ class Pedido(models.Model):
     def __str__(self):
         return "Pedido nº " + str(self.id)
     class Meta:
-        #Nombre de la tabla en la base de datos
-        db_table = 'pedidos'
         #Nombre en singular y plural
         verbose_name='pedido'
         verbose_name_plural = 'pedidos'
