@@ -14,7 +14,33 @@
     <div class="col">
       <div class="card mb-3">
         <div class="card-header">
-          <h5>Detalles del pedido</h5>
+          <div class="row">
+            <div class="col-lg-7 d-flex justify-content-start">
+              <h5>Detalles del pedido</h5>
+            </div>
+            <div class="col-sm d-flex justify-content-end acciones ml-3">
+              {% if pedido.estado == "preparando" %}
+              <li class="list-inline-item text-right">
+                  <a id="elimina" data-bs-toggle="modal" data-bs-target="#modalCancelar_{{pedido.id}}" class="btn btn-outline-danger btn-sm">Cancelar Pedido</a>
+              </li>
+              <!-- Modal para asegurarse de cancelar un pedido -->
+              <div class="modal fade" id="modalCancelar_{{pedido.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalCancelarPedido">¿Está seguro de que desea cancelar el pedido: {{pedido.id}}?</h5>
+                    </div>
+                    <div class="modal-footer">
+                      <a id="modal-cancelar" href="{% url 'cancelarPedido' pedido.id %}" class="btn btn-danger text-white">Cancelar Pedido</a>
+                      <a data-bs-dismiss="modal" class="btn btn-secondary text-white">Volver</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+        </div>
+          
         </div>
         <div class="card-body">
             <div>
