@@ -36,7 +36,7 @@ def verPedido(request,pedido_id):
     
 @login_required(login_url="/login/login")
 def pedidos(request):
-    pedidos = list(Pedido.objects.filter(user_id = request.user).values())
+    pedidos = list(Pedido.objects.filter(user_id = request.user).order_by("created_at").values())
     return render(request,"pedidos.html",{"pedidos":pedidos})
 
 @login_required(login_url="/login/login")
