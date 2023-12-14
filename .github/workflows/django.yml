@@ -27,7 +27,11 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test tienda
+        python manage.py test about
+        python manage.py test autenticacion
+        python manage.py test contacto
         python manage.py test home
+        python manage.py test pedidos
+        python manage.py test tienda
         python manage.py test
         
