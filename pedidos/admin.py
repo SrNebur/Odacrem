@@ -15,7 +15,7 @@ class PedidoAdmin(admin.ModelAdmin):
 class ProductoPedidoAdmin(admin.ModelAdmin):
     search_fields=("producto__nombre","pedido__id")
     list_display=("producto","cantidad","pedido","talla")
-    list_filter=("producto","pedido")
+    list_filter=("producto__nombre","pedido")
     list_per_page=20
 
 @admin.register(Direcciones)
