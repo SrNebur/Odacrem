@@ -140,7 +140,11 @@
                 <div class="row">
                     <div class="col-lg-4 p-2 justify-content-end">
                       <div class="ml-5">
+                        {% if prod.producto.imagen %}
                         <img class="card-img img-thumbnail prodImagen " alt="" src="{{ prod.producto.imagen.url }}"></img>
+                        {% else %}
+                        <img class="card-img img-thumbnail prodImagen " alt="" src="{% static 'img/work_in_progress.png' %}"></img>
+                        {% endif %}
                       </div>
                     </div>
                     <div class="col-lg-8 mt-2">
